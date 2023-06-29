@@ -3,7 +3,6 @@ import theme from './theme.js'
 
 export default defineUserConfig({
   base: '/',
-
   locales: {
     '/': {
       lang: 'zh-CN',
@@ -11,9 +10,5 @@ export default defineUserConfig({
       description: 'vuepress-theme-hope 的博客演示',
     },
   },
-
   theme,
-
-  // Enable it with pwa
-  // shouldPrefetch: false,
 })

@@ -9,13 +9,13 @@ export default hopeTheme({
   hostname: 'https://mister-hope.github.io',
 
   author: {
-    name: 'Mr.Hope',
+    name: 'Zaylen',
     url: 'https://mrhope.site',
   },
 
   iconAssets: 'iconfont',
 
-  logo: '/logo.svg',
+  logo: '/logo.jpg',
 
   repo: 'vuepress-theme-hope/vuepress-theme-hope',
 
@@ -23,38 +23,14 @@ export default hopeTheme({
 
   blog: {
     medias: {
-      Baidu: 'https://example.com',
-      BiliBili: 'https://example.com',
-      Bitbucket: 'https://example.com',
-      Dingding: 'https://example.com',
-      Discord: 'https://example.com',
-      Dribbble: 'https://example.com',
-      Email: 'mailto:info@example.com',
-      Evernote: 'https://example.com',
-      Facebook: 'https://example.com',
-      Flipboard: 'https://example.com',
-      Gitee: 'https://example.com',
-      GitHub: 'https://example.com',
-      Gitlab: 'https://example.com',
-      Gmail: 'mailto:info@example.com',
-      Instagram: 'https://example.com',
-      Lark: 'https://example.com',
-      Lines: 'https://example.com',
-      Linkedin: 'https://example.com',
-      Pinterest: 'https://example.com',
-      Pocket: 'https://example.com',
+      BiliBili: 'https://space.bilibili.com/67556239?spm_id_from=333.1007.0.0',
+      Pinterest: 'https://www.pinterest.com/',
+      Dribbble: 'https://dribbble.com/',
+      GitHub: 'https://github.com/Analysiszaj',
+      Email: '1418623546@qq.com',
       QQ: 'https://example.com',
-      Qzone: 'https://example.com',
-      Reddit: 'https://example.com',
-      Rss: 'https://example.com',
-      Steam: 'https://example.com',
-      Twitter: 'https://example.com',
+      Steam: 'https://steamcommunity.com/profiles/76561198873926507/',
       Wechat: 'https://example.com',
-      Weibo: 'https://example.com',
-      Whatsapp: 'https://example.com',
-      Youtube: 'https://example.com',
-      Zhihu: 'https://example.com',
-      MrHope: ['https://mrhope.site', MR_HOPE_AVATAR],
     },
   },
 
@@ -63,21 +39,14 @@ export default hopeTheme({
      * Chinese locale config
      */
     '/': {
-      // navbar
       navbar: zhNavbar,
-
-      // sidebar
       sidebar: zhSidebar,
-
       footer: '默认页脚',
-
       displayFooter: true,
-
       blog: {
-        description: '一个前端开发者',
+        description: '滴答..',
         intro: '/zh/intro.html',
       },
-
       // page meta
       metaLocales: {
         editLink: '在 GitHub 上编辑此页',
@@ -142,62 +111,5 @@ export default hopeTheme({
       vPre: true,
       vuePlayground: true,
     },
-
-    // uncomment these if you want a PWA
-    // pwa: {
-    //   favicon: "/favicon.ico",
-    //   cacheHTML: true,
-    //   cachePic: true,
-    //   appendBase: true,
-    //   apple: {
-    //     icon: "/assets/icon/apple-icon-152.png",
-    //     statusBarColor: "black",
-    //   },
-    //   msTile: {
-    //     image: "/assets/icon/ms-icon-144.png",
-    //     color: "#ffffff",
-    //   },
-    //   manifest: {
-    //     icons: [
-    //       {
-    //         src: "/assets/icon/chrome-mask-512.png",
-    //         sizes: "512x512",
-    //         purpose: "maskable",
-    //         type: "image/png",
-    //       },
-    //       {
-    //         src: "/assets/icon/chrome-mask-192.png",
-    //         sizes: "192x192",
-    //         purpose: "maskable",
-    //         type: "image/png",
-    //       },
-    //       {
-    //         src: "/assets/icon/chrome-512.png",
-    //         sizes: "512x512",
-    //         type: "image/png",
-    //       },
-    //       {
-    //         src: "/assets/icon/chrome-192.png",
-    //         sizes: "192x192",
-    //         type: "image/png",
-    //       },
-    //     ],
-    //     shortcuts: [
-    //       {
-    //         name: "Demo",
-    //         short_name: "Demo",
-    //         url: "/demo/",
-    //         icons: [
-    //           {
-    //             src: "/assets/icon/guide-maskable.png",
-    //             sizes: "192x192",
-    //             purpose: "maskable",
-    //             type: "image/png",
-    //           },
-    //         ],
-    //       },
-    //     ],
-    //   },
-    // },
   },
 })

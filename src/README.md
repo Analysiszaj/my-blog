@@ -2,10 +2,13 @@
 home: true
 layout: BlogHome
 icon: home
-title: Blog Home
-heroImage: /logo.svg
-heroText: The name of your blog
-tagline: You can put your slogan here
+title: 个人主页
+bgImage: /bg.jpg
+bgImageStyle: background-size:100% 100%
+heroImage: /logo.jpg
+heroImageStyle: border-radius:50%
+heroText: ZayLenの个人博客
+tagline: 学以致用
 heroFullScreen: true
 projects:
   - icon: project
