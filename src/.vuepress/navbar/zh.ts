@@ -48,7 +48,7 @@ export const zhNavbar = navbar([
           { text: '《javaScript》学习笔记', icon: 'edit', link: '1' },
           { text: '《css》学习笔记', icon: 'edit', link: '2' },
           { text: '《Vue》学习笔记', icon: 'edit', link: 'vue/page.html' },
-          { text: '《TypeScript》学习笔记', icon: 'edit', link: '2' },
+          { text: '《TypeScript》学习笔记', icon: 'edit', link: 'typeScript/TypeScript' },
         ],
       },
       {
