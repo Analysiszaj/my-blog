@@ -950,7 +950,7 @@ JWT（英文全称：JSON Web Token）是目前最流行的跨域认证解决方
 
 工作原理：
 
-![image-20220503231514377](E:\笔记\mkimages\image-20220503231514377.png)
+![image-20220503231514377]()
 
 **组成部分**
 
@@ -958,7 +958,7 @@ JWT 通常由三部分组成， 分别是 Header(头部), Payload(有效荷载),
 
 > Header.Payload.Signature
 
-![image-20220503233501951](E:\笔记\mkimages\image-20220503233501951.png)
+![image-20220503233501951]()
 
 - Payload 部分才是真正的用户信息，它是用户信息经过加密之后生成的字符串
 - Header 和 Signature 是安全性相关性的部分，只是为了保证 Token 的安全性
