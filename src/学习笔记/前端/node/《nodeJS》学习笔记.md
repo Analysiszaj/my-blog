@@ -1,3 +1,11 @@
+---
+lang: zh-CN
+title: node.js学习笔记
+description: 学习node.js时的笔记
+sidebar: heading
+tag: 前端
+---
+
 # node.js 笔记
 
 ## 1. 初识 node.js

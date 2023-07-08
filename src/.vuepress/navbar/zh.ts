@@ -3,63 +3,27 @@ import { navbar } from 'vuepress-theme-hope'
 export const zhNavbar = navbar([
   '/',
   {
-    text: '随笔',
-    icon: 'edit',
-    prefix: '/zh/posts/',
-    children: [
-      {
-        text: '苹果',
-        icon: 'edit',
-        prefix: 'apple/',
-        children: [
-          { text: '苹果1', icon: 'edit', link: '1' },
-          { text: '苹果2', icon: 'edit', link: '2' },
-        ],
-      },
-      {
-        text: '香蕉',
-        icon: 'edit',
-        prefix: 'banana/',
-        children: [
-          {
-            text: '香蕉 1',
-            icon: 'edit',
-            link: '1',
-          },
-          {
-            text: '香蕉 2',
-            icon: 'edit',
-            link: '2',
-          },
-        ],
-      },
-    ],
-  },
-  {
     text: '学习笔记',
     icon: 'edit',
-    prefix: 'demo/',
+    prefix: '/学习笔记',
     children: [
       {
         text: '前端',
         icon: 'edit',
-        prefix: 'front/',
+        prefix: '/前端',
         children: [
           { text: '《javaScript》学习笔记', icon: 'edit', link: '1' },
           { text: '《css》学习笔记', icon: 'edit', link: '2' },
-          { text: '《Vue》学习笔记', icon: 'edit', link: 'vue/page.html' },
-          { text: '《TypeScript》学习笔记', icon: 'edit', link: 'typeScript/TypeScript' },
-          { text: '《NodeJS》学习笔记', icon: 'edit', link: 'node/nodeJS' },
+          { text: '《Vue》学习笔记', icon: 'edit', link: '/vue/《vue3》学习笔记' },
+          { text: '《TypeScript》学习笔记', icon: 'edit', link: '/typeScript/《TypeScript》学习笔记' },
+          { text: '《NodeJS》学习笔记', icon: 'edit', link: '/node/《nodeJS》学习笔记' },
         ],
       },
       {
         text: '后端',
         icon: 'edit',
         prefix: 'after/',
-        children: [
-          { text: '苹果1', icon: 'edit', link: '1' },
-          { text: '苹果2', icon: 'edit', link: '2' },
-        ],
+        children: [],
       },
     ],
   },

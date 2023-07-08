@@ -2,12 +2,13 @@
 lang: zh-CN
 title: vue3学习笔记
 description: 学习vue3时的笔记
+sidebar: heading
 tag: 前端
 ---
 
 # vue3 学习笔记
 
-### 1.bem 架构
+## 1.bem 架构
 
 **bem 架构**即**Block（块层）**,**element（元素层）**，**modifier（修饰符层）**，是由 Yandex 团队提出的一种 css 命名方法.
 
@@ -25,7 +26,7 @@ tag: 前端
 
 <img src="https://s1.ax1x.com/2023/07/08/pCgK6Tx.png" alt="image-20230702161254316" style="zoom:50%;" />
 
-#### 使用 Sass 编写 bem 架构
+### 1.1 使用 Sass 编写 bem 架构
 
 1.安装 sass
 
@@ -110,9 +111,9 @@ css: {
 
 <img src="https://s1.ax1x.com/2023/07/08/pCgKsmR.png" alt="image-20230706165343415" style="zoom:50%;" />
 
-### 2.父子组件传参
+## 2.父子组件传参
 
-#### 2.1 父传子
+### 2.1 父传子
 
 可以通过父组件上通过`v-bind`传递值，子组件通过`defineProps`来接收值
 
@@ -164,7 +165,7 @@ withDefaults(defaineProps<Props>(), {
 </script>
 ```
 
-#### 2.2 子传父
+### 2.2 子传父
 
 父组件通过绑定事件来接收, 子组件通过`defineEmits`来传递值
 
@@ -232,7 +233,7 @@ onMounted(() => {
 </script>
 ```
 
-#### 2.3 瀑布流实现
+### 2.3 瀑布流实现
 
 **父组件 WaterFall.vue**
 
@@ -333,3 +334,7 @@ onMounted(() => {
 }
 </style>
 ```
+
+效果如下：
+
+![](https://s1.ax1x.com/2023/07/08/pCgQwL9.png)

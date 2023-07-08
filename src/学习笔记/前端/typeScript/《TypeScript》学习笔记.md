@@ -2,6 +2,7 @@
 lang: zh-CN
 title: TypeScript学习笔记
 description: 学习TypeScript时的笔记
+sidebar: heading
 tag: 前端
 ---
 
