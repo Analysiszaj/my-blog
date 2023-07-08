@@ -4,7 +4,7 @@ layout: BlogHome
 icon: home
 title: 个人主页
 bgImage: /bg.jpg
-bgImageStyle: background-size:100% 100%
+bgImageStyle: background-position-y:bottom!important
 heroImage: /logo.jpg
 heroImageStyle: border-radius:50%
 heroText: ZayLenの个人博客
