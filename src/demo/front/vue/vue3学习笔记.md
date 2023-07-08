@@ -1,3 +1,10 @@
+---
+lang: zh-CN
+title: vue3学习笔记
+description: 学习vue3时的笔记
+tag: 前端
+---
+
 # vue3 学习笔记
 
 ### 1.bem 架构
