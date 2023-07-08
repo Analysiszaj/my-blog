@@ -10,7 +10,7 @@ export default hopeTheme({
 
   author: {
     name: 'Zaylen',
-    url: 'https://mrhope.site',
+    url: 'https://www.zaylen.top',
   },
 
   iconAssets: 'iconfont',
