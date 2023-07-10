@@ -4,7 +4,7 @@ title: node.js学习笔记
 description: 学习node.js时的笔记
 sidebar: heading
 tag: 前端
-category: 前端
+category: NodeJs
 date: 2022-11-24
 ---
 
