@@ -3,8 +3,8 @@ lang: zh-CN
 title: TypeScript学习笔记
 description: 学习TypeScript时的笔记
 sidebar: heading
-tag: 前端
-category: TypeScript
+tag: TypeScript
+category: 前端
 date: 2023-02-26
 ---
 

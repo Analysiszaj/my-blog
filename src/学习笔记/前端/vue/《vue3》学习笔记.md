@@ -3,8 +3,8 @@ lang: zh-CN
 title: vue3学习笔记
 description: 学习vue3时的笔记
 sidebar: heading
-tag: 前端
-category: Vue
+tag: Vue3
+category: 前端
 date: 2023-07-08
 ---
 
@@ -386,8 +386,6 @@ onMounted(() => {
 
 ![](https://s1.ax1x.com/2023/07/08/pCgQwL9.png)
 
-
-
 ## 3.局部,全局,递归组件
 
 ### 3.1 局部组件
@@ -398,14 +396,12 @@ onMounted(() => {
 
 ```vue
 <template>
-	<ComTest></ComTest>
+  <ComTest></ComTest>
 </template>
 <script>
 import ComTest from './components/ComTest.vue'
 </script>
 ```
-
-
 
 ### 3.2 全局组件
 
@@ -415,4 +411,3 @@ import ComTest from './components/ComTest.vue'
 import xxx from './components/xxx.vue'
 app.component('OverAll', xxx)
 ```
-

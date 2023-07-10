@@ -3,8 +3,8 @@ lang: zh-CN
 title: node.js学习笔记
 description: 学习node.js时的笔记
 sidebar: heading
-tag: 前端
-category: NodeJs
+tag: NodeJs
+category: 前端
 date: 2022-11-24
 ---
 
