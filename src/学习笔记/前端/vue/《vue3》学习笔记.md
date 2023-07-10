@@ -385,3 +385,34 @@ onMounted(() => {
 效果如下：
 
 ![](https://s1.ax1x.com/2023/07/08/pCgQwL9.png)
+
+
+
+## 3.局部,全局,递归组件
+
+### 3.1 局部组件
+
+局部组件就是通过`import xxx from './components/xxx.vue'`导入进来的组件，只能在该组件中生效
+
+使用局部组件
+
+```vue
+<template>
+	<ComTest></ComTest>
+</template>
+<script>
+import ComTest from './components/ComTest.vue'
+</script>
+```
+
+
+
+### 3.2 全局组件
+
+注册全局组件需要到`main.ts`中通过`app.component()`来注册
+
+```typescript
+import xxx from './components/xxx.vue'
+app.component('OverAll', xxx)
+```
+
