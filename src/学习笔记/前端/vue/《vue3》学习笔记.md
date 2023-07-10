@@ -4,6 +4,8 @@ title: vue3学习笔记
 description: 学习vue3时的笔记
 sidebar: heading
 tag: 前端
+category: 前端
+date: 2023-07-08
 ---
 
 # vue3 学习笔记
@@ -230,6 +232,51 @@ console.log(waterFall.value?.name) // undefined
 onMounted(() => {
   console.log(waterFall.value?.name) // aaaa
 })
+</script>
+```
+
+### 2.3 双向绑定
+
+在vue3中如果想实现父子组件双向绑定，除了可以使用`v-bind`, 和`emit()`的方式来实现还可以通过一个简写方式:
+
+**父组件father.vue**
+
+```vue
+<Child v-model:bothway="bothway"></Child>
+<script>
+import {ref} from 'vue'
+const bothway = ref<string>('我是默认值')
+</script>
+```
+
+**子组件Child.vue**
+
+```vue
+<template>
+	父组件传给子组件的值：{{bothway}}
+	<button @click="sendBothway">修改双向绑定的值</button>
+</template>
+
+<script>
+    const props = defineProps(['bothway'])
+    // 数组字面量的方式
+	const emit = defineEmits(['update:bothway'])
+    
+    /**
+ 	ts的方式
+ 	const emit = defineEmits<{
+ 	(e: 'update:bothway', value: string):void
+ 	}>()
+ 	
+ 	ts方式简写
+ 	const emit = defineEmits<{
+ 		'update:bothway': [value: string]
+ 	}>()    
+    **/
+    
+    const sendBothway = () => {
+        emit('update:bothway', '修改了双向绑定了')
+    }
 </script>
 ```
 
