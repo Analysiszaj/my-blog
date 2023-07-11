@@ -24,7 +24,7 @@ date: 2022-09-10
 
 ### 2.1 JS 组成
 
-​ JavaScript 由**JavaScript 语法(ECMAScript)**， **页面文档对象模型(DOM)**, **浏览器对象模型（BOM）**组成
+ JavaScript 由**JavaScript 语法(ECMAScript)**， **页面文档对象模型(DOM)**, **浏览器对象模型（BOM）**组成
 
 <img src="https://s1.ax1x.com/2023/07/11/pCWe3h8.png" alt="image-20220209143313078" style="zoom:75%;" />
 
@@ -330,9 +330,9 @@ js 中对象是属性和方法的集合
 >
 > function 构造函数名() {
 >
-> ​ this.属性 = 值；
+>  this.属性 = 值；
 >
-> ​ this.方法 = function() {}
+>  this.方法 = function() {}
 >
 > }
 >
@@ -1139,14 +1139,14 @@ ex2.test('元字符元') // false
 
 2.量词（表示重复次数）
 
-| 量词  | 说明              |
-| ----- | ----------------- |
-| \*    | 重复零次或更多次  |
-| +     | 重复一次或多次    |
-| ?     | 重复零次或一次    |
-| {n}   | 重复 n 次         |
-| {n,}  | 重复 n 次或更多次 |
-| {n,m} | c 重复 n 到 m 次  |
+| 量词    | 说明              |
+| ------- | ----------------- |
+| \*      | 重复零次或更多次  |
+| +       | 重复一次或多次    |
+| ?       | 重复零次或一次    |
+| {n}     | 重复 n 次         |
+| `{n,}`  | 重复 n 次或更多次 |
+| `{n,m}` | c 重复 n 到 m 次  |
 
 ```javascript
 console.log(/a*/.test('')) // true
@@ -1399,13 +1399,13 @@ ES6,全称 ECMAScript6.0， 2015.06 发版,但是目前浏览器的 JAVAScript �
 
 > function obj(name, age){
 >
-> ​ this.name = name
+>  this.name = name
 >
-> ​ this.age = age
+>  this.age = age
 >
-> ​ this.sing = function(){
+>  this.sing = function(){
 >
-> ​ }
+>  }
 >
 > }
 >
@@ -1694,7 +1694,7 @@ Son.prototype.exam = function () {
 
 - trim 删除两边空白字符,不会改变原字符串，返回一个新字符串
 
-​
+
 
 #### 4.5.3 对象方法
 
