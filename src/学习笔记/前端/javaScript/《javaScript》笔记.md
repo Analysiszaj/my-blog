@@ -26,7 +26,7 @@ date: 2022-09-10
 
 ​ JavaScript 由**JavaScript 语法(ECMAScript)**， **页面文档对象模型(DOM)**, **浏览器对象模型（BOM）**组成
 
-<img src=".\mkimages\image-20220209143313078.png" alt="image-20220209143313078" style="zoom:75%;" />
+<img src="https://s1.ax1x.com/2023/07/11/pCWe3h8.png" alt="image-20220209143313078" style="zoom:75%;" />
 
 **1.ECMAScript**
 
@@ -77,7 +77,7 @@ js 有三种书写模式： 行内式， 内嵌式， 外部式
 
 ### 2.4 输入输出语句
 
-![image-20220209150225706](.\mkimages\image-20220209150225706.png)
+![](https://s1.ax1x.com/2023/07/11/pCWeG9S.png)
 
 ### 2.5 变量
 
@@ -111,7 +111,7 @@ var age = 18,
 
 - 复杂数据类型（Object, Array, function）
 
-![image-20220210153136880](.\mkimages\image-20220210153136880.png)
+![](https://s1.ax1x.com/2023/07/11/pCWeYcQ.png)
 
 **1.数字型三个特殊值**
 
@@ -125,7 +125,7 @@ isNaN()函数
 
 **3.字符串转义符**
 
-![image-20220210184105342](.\mkimages\image-20220210184105342.png)
+![](https://s1.ax1x.com/2023/07/11/pCWe1tf.png)
 
 **4.字符串拼接**
 
@@ -139,11 +139,11 @@ typeof 'dfdsfd'
 
 **6.字符串类型转换**
 
-![image-20220210192440601](.\mkimages\image-20220210192440601.png)
+![](https://s1.ax1x.com/2023/07/11/pCWeJ1g.png)
 
-![image-20220210194105657](.\mkimages\image-20220210194105657.png)
+![](https://s1.ax1x.com/2023/07/11/pCWed7q.png)
 
-![image-20220210195013590](.\mkimages\image-20220210195013590.png)
+![](https://s1.ax1x.com/2023/07/11/pCWetXj.png)
 
 ### 2.7 运算符
 
@@ -151,7 +151,7 @@ typeof 'dfdsfd'
 
 **1.算数运算符**
 
-![image-20220211144615813](.\mkimages\image-20220211144615813.png)
+![](https://s1.ax1x.com/2023/07/11/pCWeUns.png)
 
 - 浮点数运算会出现精度问题
 
@@ -163,19 +163,19 @@ typeof 'dfdsfd'
 
 3.**比较运算符**
 
-![image-20220621121545401](.\mkimages\image-20220621121545401.png)
+![](https://s1.ax1x.com/2023/07/11/pCWe0A0.png)
 
 4.**逻辑运算符**
 
-![image-20221005111056538](E:\前端\基础\JavaScript学习\mkimages\image-20221005111056538.png)
+![](https://s1.ax1x.com/2023/07/11/pCWeaBn.png)
 
 5.**赋值运算符**
 
-![image-20221005115900470](E:\前端\基础\JavaScript学习\mkimages\image-20221005115900470.png)
+![](https://s1.ax1x.com/2023/07/11/pCWeBNV.png)
 
 6.**运算符优先级**
 
-![image-20221005120905981](E:\前端\基础\JavaScript学习\mkimages\image-20221005120905981.png)
+![](https://s1.ax1x.com/2023/07/11/pCWeDhT.png)
 
 ### 2.8 流程控制
 
@@ -191,7 +191,7 @@ typeof 'dfdsfd'
 
 **`switch` 和 `if else if`区别**
 
-![image-20221006130457304](E:\前端\基础\JavaScript学习\mkimages\image-20221006130457304.png)
+![](https://s1.ax1x.com/2023/07/11/pCWecjJ.png)
 
 ### 2.9 循环
 
@@ -211,9 +211,9 @@ typeof 'dfdsfd'
 - 变量的名词一般用名词
 - 函数的名称一般用动词
 
-![image-20221006133620871](E:\前端\基础\JavaScript学习\mkimages\image-20221006133620871.png)
+![](https://s1.ax1x.com/2023/07/11/pCWe6c4.png)
 
-![image-20221006133647784](E:\前端\基础\JavaScript学习\mkimages\image-20221006133647784.png)
+![](https://s1.ax1x.com/2023/07/11/pCWey3F.png)
 
 ### 2.11 数组
 
@@ -496,7 +496,7 @@ document:是 DOM 里面提供的一个对象
 >
 > 对象.onclick = function(){} // 会有事件冒泡
 
-![image-20221011170146835](E:\前端\基础\JavaScript学习\mkimages\image-20221011170146835.png)
+![](https://s1.ax1x.com/2023/07/11/pCWQFAA.png)
 
 **事件类型**
 
@@ -627,13 +627,13 @@ let new UL = ul.cloneNode()
 
 > new Date()
 
-![image-20221012210912774](E:\前端\基础\JavaScript学习\mkimages\image-20221012210912774.png)
+![](https://s1.ax1x.com/2023/07/11/pCWQP7d.png)
 
 **重绘和回流**
 
 浏览器是如何进行界面渲染的
 
-![image-20221015134028398](E:\前端\基础\JavaScript学习\mkimages\image-20221015134028398.png)
+![](https://s1.ax1x.com/2023/07/11/pCWQSXD.png)
 
 - 解析（parser)HTML， 生成 DOM 树（DOM Tree)
 - 同时解析（parser)css， 生成样式规则（style Rules)
@@ -675,7 +675,7 @@ let new UL = ul.cloneNode()
 
 **事件流**指的是事件完整指向过程中的流动路径
 
-![image-20221018175131962](E:\前端\基础\JavaScript学习\mkimages\image-20221018175131962.png)
+![](https://s1.ax1x.com/2023/07/11/pCWQC0H.png)
 
 - **事件冒泡**
   - 当一个元素的事件被触发时，同样的事件将会在该元素的所有祖先元素中依次触发，这一过程杯称为事件冒泡
@@ -891,7 +891,7 @@ window.addEventListener('resize', function () {})
 
 BOM（Browser Object Model) 是浏览器对象模型
 
-![image-20221022143235867](E:\前端\基础\JavaScript学习\mkimages\image-20221022143235867.png)
+![](https://s1.ax1x.com/2023/07/11/pCWQ9ne.png)
 
 window 对象是浏览器内置的全局对象,我们所学的所有 Web APIs 的知识内容都是基于 window 对象实现的
 
@@ -941,7 +941,7 @@ javaScript 语言的一大特点就是单线程，也就是说同一个事件只
 
 你还可以去处理其他事情
 
-![image-20221022154052615](E:\前端\基础\JavaScript学习\mkimages\image-20221022154052615.png)
+![](https://s1.ax1x.com/2023/07/11/pCWQktI.png)
 
 #### 3.2.4 location 对象
 
@@ -973,7 +973,7 @@ function(){
 
 #### 3.2.6 history 对象
 
-![image-20221022201106536](E:\前端\基础\JavaScript学习\mkimages\image-20221022201106536.png)
+![](https://s1.ax1x.com/2023/07/11/pCWQYcT.png)
 
 #### 3.2.7 本地存储
 
@@ -1177,7 +1177,7 @@ console.log(/[abc-_]/.test('ccc'))
 
 预定义：指的是某些常见模式的简写方式
 
-![image-20221024222939545](E:\前端\基础\JavaScript学习\mkimages\image-20221024222939545.png)
+![](https://s1.ax1x.com/2023/07/11/pCWQtjU.png)
 
 4.修饰符
 
@@ -1197,7 +1197,7 @@ console.log(/[abc-_]/.test('ccc'))
 
 面向过程就是分析出解决问题所需要的步骤，然后用函数把这些步骤一步一步实现，使用的时候再一个一个的依次调用
 
-![image-20221022202554406](E:\前端\基础\JavaScript学习\mkimages\image-20221022202554406.png)
+![](https://s1.ax1x.com/2023/07/11/pCWQUuF.png)
 
 面向过程，就是按照我们分析好了的步骤，按照步骤解决问题
 
@@ -1209,7 +1209,7 @@ console.log(/[abc-_]/.test('ccc'))
 
 面对对象是把事物分解成一个个对象，然后由对象之间分工与合作
 
-![image-20221022202811867](E:\前端\基础\JavaScript学习\mkimages\image-20221022202811867.png)
+![](https://s1.ax1x.com/2023/07/11/pCWQdHJ.png)
 
 面对对象是以对象功能来花费问题，而不是步骤
 
@@ -1479,7 +1479,7 @@ console.log(ldh.__proto__ === Star.prototype)
 // 如果没有sing这个方法，因为有__proto__的存在，就去构造函数原型对象prototype身上查找sing这个方法
 ```
 
-![image-20221108161107225](E:\前端\基础\JavaScript学习\mkimages\image-20221108161107225.png)
+![](https://s1.ax1x.com/2023/07/11/pCWQBNR.png)
 
 对象原型和构造函数 prototype 原型里面都有个一个属性 constructor 属性，constructor 我们称为构造函数,因为它指回构造函数本身
 
@@ -1511,11 +1511,11 @@ console.log(ldh.__proto__.constructor)
 
 构造函数，实例，原型对象三者之间的关系
 
-![image-20221108172820141](E:\前端\基础\JavaScript学习\mkimages\image-20221108172820141.png)
+![](https://s1.ax1x.com/2023/07/11/pCWQ0E9.png)
 
 #### 4.3.3 原型链
 
-![image-20221108173054895](E:\前端\基础\JavaScript学习\mkimages\image-20221108173054895.png)
+![](https://s1.ax1x.com/2023/07/11/pCWQs9x.png)
 
 **JavaScript 的成员查找机制**
 
@@ -1704,7 +1704,7 @@ Son.prototype.exam = function () {
 - prop：必须，定义或修改的属性的名字
 - descriptor: 必需， 目标属性所拥有的特性
 
-![image-20221126193746172](E:\前端\基础\JavaScript学习\mkimages\image-20221126193746172.png)
+![](https://s1.ax1x.com/2023/07/11/pCWQD41.png)
 
 > Object.keys()
 
@@ -1778,7 +1778,7 @@ setTimeout(function () {
 
 this 的指向，式当我们调用函数的式时候确定的，调用方式的不同决定了 this 的指向不同
 
-![image-20221129185442297](E:\前端\基础\JavaScript学习\mkimages\image-20221129185442297.png)
+![](https://s1.ax1x.com/2023/07/11/pCWQy36.png)
 
 #### 4.6.3 改变函数 this 指向
 
@@ -1812,7 +1812,7 @@ console.log(Math.max.apply(Math, arr)) // 56
 
 ### 4.7 严格模式
 
-![image-20221201183842923](E:\前端\基础\JavaScript学习\mkimages\image-20221201183842923.png)
+![]()
 
 **开启严格模式**
 
