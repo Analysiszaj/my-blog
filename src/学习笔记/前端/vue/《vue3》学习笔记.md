@@ -451,7 +451,7 @@ const { treeData } = toRefs(props)
 <script setup lang="ts">
 import Tree from './components/Tree.vue'
 import { reactive } from 'vue'
-    
+
 interface TreeType {
   name: string
   checked: boolean
@@ -520,7 +520,7 @@ Tree.vue
 <template>
   <div class="tree" v-for="(item, key) in treeData" :key="key">
     <input type="checkbox" name="" id="" :checked="item.checked" /> <span>{{ item.name }}</span>
-     <!--这里可以直接使用Test组件名-->
+    <!--这里可以直接使用Test组件名-->
     <Test v-if="item?.children?.length" :treeData="item.children"></Test>
   </div>
 </template>
@@ -534,7 +534,7 @@ const { treeData } = toRefs(props)
 <script>
 // 文件内修改组件名称
 export default {
-    name: 'Test'
+  name: 'Test',
 }
 </script>
 
@@ -554,12 +554,12 @@ export default {
 // 直接修改组件名
 defineOptions({
   name: 'Foo',
-  inheritAttrs: false
+  inheritAttrs: false,
 })
 </script>
 ```
 
-**在vue3.3+版本中已经支持了该种写法，不需要导入组件**[文档说明](https://cn.vuejs.org/api/sfc-script-setup.html#defineoptions)
+**在 vue3.3+版本中已经支持了该种写法，不需要导入组件**[文档说明](https://cn.vuejs.org/api/sfc-script-setup.html#defineoptions)
 
 我自己也尝试了一种想法，也能实现修改名字的效果,就是通过`import xxx from 'Tree.vue'`也能实现修改组件名的效果， **不建议参考哈，自己的一点小尝试**😂😂😂😂
 
@@ -586,11 +586,8 @@ DynamicState.vue
 <template>
   <div>
     <div class="zay-botton-list">
-      <div v-for="(item, key) in data" :key="key" 
-           class="zay-botton" 
-           :class="{ 'zay-botton--active': key === active }"
-           @click="switchTable(item, key)">
-        	{{ item.name }}
+      <div v-for="(item, key) in data" :key="key" class="zay-botton" :class="{ 'zay-botton--active': key === active }" @click="switchTable(item, key)">
+        {{ item.name }}
       </div>
     </div>
     <Component :is="comId"></Component>
@@ -654,7 +651,7 @@ const switchTable = (item: dataType, index: number) => {
 
 ![](https://pic.imgdb.cn/item/64ae1f851ddac507ccebed10.png)
 
-还可以采用**选项式API**的方式：
+还可以采用**选项式 API**的方式：
 
 ```vue
 <script>
@@ -663,11 +660,11 @@ import Bvue from './B.vue'
 import Cvue from './C.vue'
 
 export default {
-    conponents: {
-        Avue,
-        Bvue,
-        Cvue
-    }
+  conponents: {
+    Avue,
+    Bvue,
+    Cvue,
+  },
 }
 </script>
 ```
@@ -693,7 +690,7 @@ const data = Reactive([
 
 ### 3.6 异步组件
 
-异步组件，就是将组件单独打包，当需要访问的时候才加载该组件的js(**默认情况下，当把vue 项目打包时会生成一个js， 当项目过大的时候，一个js 可能10多M,在网速慢的情况下，会造成首屏加载时间过长，造成用户体验差，这时我们可以使用异步组件 PS:个人理解,有错误欢迎指正**)
+异步组件，就是将组件单独打包，当需要访问的时候才加载该组件的 js(**默认情况下，当把 vue 项目打包时会生成一个 js， 当项目过大的时候，一个 js 可能 10 多 M,在网速慢的情况下，会造成首屏加载时间过长，造成用户体验差，这时我们可以使用异步组件 PS:个人理解,有错误欢迎指正**)
 
 使用异步组件实现一个骨架屏效果
 
@@ -811,23 +808,23 @@ const { data } = await axios.get<dataType>('./data.json')
 </style>
 ```
 
-自己封装的axios.ts
+自己封装的 axios.ts
 
 ```typescript
 export const axios = {
-    get<T>(url: string):Promise<T> {
-        return new Promise((reslove) =>{
-            const xhr = new XMLHttpRequest()
-        	xhr.open('GET', url)
+  get<T>(url: string): Promise<T> {
+    return new Promise((reslove) => {
+      const xhr = new XMLHttpRequest()
+      xhr.open('GET', url)
 
-			xhr.onreadystatechange = () => {
-            	if(xhr.readyType === 4 && xhr.status === 200){
-					resolve(JSON.parse(xhr.responseText))                
-            	}
-        	}
-            xhr.send(null)
-        })   
-    }
+      xhr.onreadystatechange = () => {
+        if (xhr.readyType === 4 && xhr.status === 200) {
+          resolve(JSON.parse(xhr.responseText))
+        }
+      }
+      xhr.send(null)
+    })
+  },
 }
 ```
 
@@ -840,7 +837,7 @@ export const axios = {
     <template #default>
       <Sync></Sync>
     </template>
-	<!--加载时显示的组件-->
+    <!--加载时显示的组件-->
     <template #fallback>
       <Skeleton></Skeleton>
     </template>
@@ -856,37 +853,32 @@ interface TreeType {
   checked: boolean
   children?: TreeType[]
 }
-const Sync = defineAsyncComponent(() => import('@/components/expame/Sync.vue'))	
+const Sync = defineAsyncComponent(() => import('@/components/expame/Sync.vue'))
 </script>
 
-<style scoped lang="scss">
-</style>
+<style scoped lang="scss"></style>
 ```
 
 效果：
 
-![](E:\博客\my-blog\src\学习笔记\前端\vue\mkimages\64aec3101ddac507cc84562b.gif)
-
-
+![](https://pic.imgdb.cn/item/64aec3101ddac507cc84562b.gif)
 
 ### 3.7 传送组件
 
-传送组件，就是将该组件传送到指定的标签内，这时该组件将成为指定标签的子组件，可以用在移动端吸顶，pc端内嵌这种场景下
+传送组件，就是将该组件传送到指定的标签内，这时该组件将成为指定标签的子组件，可以用在移动端吸顶，pc 端内嵌这种场景下
 
 ```vue
 <template>
-<!--可以通过disabled 来控制是否启用传送组件-->
-<Teleport :disabled="isMoblie" to="body">
-	<div>传送了</div>
-</Teleport>
+  <!--可以通过disabled 来控制是否启用传送组件-->
+  <Teleport :disabled="isMoblie" to="body">
+    <div>传送了</div>
+  </Teleport>
 </template>
 <script>
-import {ref} from 'vue'
+import { ref } from 'vue'
 const isMoblie = ref(true)
 </script>
 ```
-
-
 
 ### 3.8 缓存组件
 
@@ -896,17 +888,17 @@ const isMoblie = ref(true)
 
 ```vue
 <template>
-	<!--
+  <!--
 		exculde 指定不缓存页面
 		max 指定缓存的数量
 		inlcude 指定缓存的页面A， B
 		页面被缓存时，默认输入的参数也会被保存， 如from 表单中的input 等
 	-->
-	
-	<keep-alive :include="[A, B]">
-    	<A v-if="flag"></A>
-        <B else></B>
-    </keep-alive>
+
+  <keep-alive :include="[A, B]">
+    <A v-if="flag"></A>
+    <B else></B>
+  </keep-alive>
 </template>
 ```
 
@@ -915,21 +907,19 @@ const isMoblie = ref(true)
 ```vue
 <script>
 onActivate(() => {
-    console.log('选中时')
+  console.log('选中时')
 })
 onDeactivated(() => {
-    console.log('keep-alive 卸载时')
+  console.log('keep-alive 卸载时')
 })
 </script>
 ```
-
-
 
 ## 4.插槽
 
 ### 4.1 匿名插槽
 
-通过子组件放入一个插槽`<slot>`	
+通过子组件放入一个插槽`<slot>`
 
 ```vue
 <div>
@@ -950,8 +940,6 @@ onDeactivated(() => {
 ```
 
 这是父组件中写的`<template slot>`标签包裹的内容，会被替换到子组件中`<slot>`的位置
-
-
 
 ### 4.2 具名插槽
 
@@ -979,8 +967,6 @@ onDeactivated(() => {
 ```
 
 这时就会被插入到指定的位置
-
-
 
 ### 4.3 作用域插槽
 
@@ -1020,7 +1006,4 @@ import SlotChild from './SlotChild.vue'
 </script>
 ```
 
-通过在父组件的`<template v-slot:header="{data}">`可以将data解构出来,这就是作用域插槽。
-
-
-
+通过在父组件的`<template v-slot:header="{data}">`可以将 data 解构出来,这就是作用域插槽。
