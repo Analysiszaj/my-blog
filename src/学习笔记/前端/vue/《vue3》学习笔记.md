@@ -691,6 +691,238 @@ const data = Reactive([
 ])
 ```
 
+### 3.6 异步组件
+
+异步组件，就是将组件单独打包，当需要访问的时候才加载该组件的js(**默认情况下，当把vue 项目打包时会生成一个js， 当项目过大的时候，一个js 可能10多M,在网速慢的情况下，会造成首屏加载时间过长，造成用户体验差，这时我们可以使用异步组件 PS:个人理解,有错误欢迎指正**)
+
+使用异步组件实现一个骨架屏效果
+
+加载时显示组件：Skeleton.vue
+
+```vue
+<template>
+  <div class="zay-skeleton">
+    <div class="zay-skeleton__header">
+      <div class="zay-skeleton__icon zay-skeleton--bg"></div>
+      <div class="zay-skeleton__name zay-skeleton--bg"></div>
+    </div>
+    <div class="zay-skeleton__content">
+      <div class="zay-skeleton__content-item zay-skeleton--bg"></div>
+      <div class="zay-skeleton__content-item zay-skeleton--bg"></div>
+      <div class="zay-skeleton__content-item zay-skeleton--bg"></div>
+    </div>
+  </div>
+</template>
+
+<script setup lang="ts"></script>
+
+<style scoped lang="scss">
+@include b(skeleton) {
+  width: 500px;
+  height: 250px;
+  border: 1px solid black;
+  padding: 8px 12px;
+  @include e(header) {
+    display: flex;
+    align-items: center;
+    padding: 12px 0px;
+    border-bottom: 1px solid black;
+  }
+  @include e(icon) {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+  }
+  @include e(name) {
+    margin-left: 12px;
+    width: 125px;
+    height: 18px;
+  }
+
+  @include e(content) {
+    padding: 12px 0px;
+  }
+  @include e(content-item) {
+    height: 18px;
+    margin-bottom: 8px;
+  }
+
+  @include m(bg) {
+    background-color: rgb(204, 204, 204);
+  }
+}
+</style>
+```
+
+异步组件：Sync.vue
+
+```vue
+<template>
+  <div class="zay-skeleton">
+    <div class="zay-skeleton__header">
+      <img class="zay-skeleton__icon" :src="data.url" />
+      <div class="zay-skeleton__name">{{ data.name }}</div>
+    </div>
+    <div class="zay-skeleton__content">{{ data.desc }}</div>
+  </div>
+</template>
+
+<script setup lang="ts">
+import { axios } from '@/server/axios'
+interface dataType {
+  data: {
+    name: string
+    age: number
+    url: string
+    desc: string
+  }
+}
+// 顶层await 即为异步组件
+const { data } = await axios.get<dataType>('./data.json')
+</script>
+
+<style scoped lang="scss">
+@include b(skeleton) {
+  width: 500px;
+  height: 250px;
+  border: 1px solid black;
+  padding: 8px 12px;
+  @include e(header) {
+    display: flex;
+    align-items: center;
+    padding: 12px 0px;
+    border-bottom: 1px solid black;
+  }
+  @include e(icon) {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+  }
+  @include e(name) {
+    margin-left: 12px;
+    width: 125px;
+    height: 18px;
+  }
+
+  @include e(content) {
+    padding: 12px 0px;
+  }
+}
+</style>
+```
+
+自己封装的axios.ts
+
+```typescript
+export const axios = {
+    get<T>(url: string):Promise<T> {
+        return new Promise((reslove) =>{
+            const xhr = new XMLHttpRequest()
+        	xhr.open('GET', url)
+
+			xhr.onreadystatechange = () => {
+            	if(xhr.readyType === 4 && xhr.status === 200){
+					resolve(JSON.parse(xhr.responseText))                
+            	}
+        	}
+            xhr.send(null)
+        })   
+    }
+}
+```
+
+使用：
+
+```vue
+<template>
+  <Suspense>
+    <!--异步组件-->
+    <template #default>
+      <Sync></Sync>
+    </template>
+	<!--加载时显示的组件-->
+    <template #fallback>
+      <Skeleton></Skeleton>
+    </template>
+  </Suspense>
+</template>
+
+<script setup lang="ts">
+import Skeleton from './components/expame/Skeleton.vue'
+import { reactive, defineAsyncComponent } from 'vue'
+
+interface TreeType {
+  name: string
+  checked: boolean
+  children?: TreeType[]
+}
+const Sync = defineAsyncComponent(() => import('@/components/expame/Sync.vue'))	
+</script>
+
+<style scoped lang="scss">
+</style>
+```
+
+效果：
+
+![](E:\博客\my-blog\src\学习笔记\前端\vue\mkimages\64aec3101ddac507cc84562b.gif)
+
+
+
+### 3.7 传送组件
+
+传送组件，就是将该组件传送到指定的标签内，这时该组件将成为指定标签的子组件，可以用在移动端吸顶，pc端内嵌这种场景下
+
+```vue
+<template>
+<!--可以通过disabled 来控制是否启用传送组件-->
+<Teleport :disabled="isMoblie" to="body">
+	<div>传送了</div>
+</Teleport>
+</template>
+<script>
+import {ref} from 'vue'
+const isMoblie = ref(true)
+</script>
+```
+
+
+
+### 3.8 缓存组件
+
+当我们不需要组件重新渲染的时候，或者出于性能考虑，避免多次重复渲染降低性能,可以使用`<keep-alive>` 缓存组件.
+
+用法：
+
+```vue
+<template>
+	<!--
+		exculde 指定不缓存页面
+		max 指定缓存的数量
+		inlcude 指定缓存的页面A， B
+		页面被缓存时，默认输入的参数也会被保存， 如from 表单中的input 等
+	-->
+	
+	<keep-alive :include="[A, B]">
+    	<A v-if="flag"></A>
+        <B else></B>
+    </keep-alive>
+</template>
+```
+
+使用缓存组件时，会新增两个生命周期分别是`onActivated()` 和 `onDeactivated()`
+
+```vue
+<script>
+onActivate(() => {
+    console.log('选中时')
+})
+onDeactivated(() => {
+    console.log('keep-alive 卸载时')
+})
+</script>
+```
+
 
 
 ## 4.插槽
