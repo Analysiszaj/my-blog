@@ -386,7 +386,7 @@ onMounted(() => {
 
 ![](https://s1.ax1x.com/2023/07/08/pCgQwL9.png)
 
-## 3.局部,全局,递归组件
+## 3.组件
 
 ### 3.1 局部组件
 
@@ -411,3 +411,384 @@ import ComTest from './components/ComTest.vue'
 import xxx from './components/xxx.vue'
 app.component('OverAll', xxx)
 ```
+
+### 3.3 递归组件
+
+递归组件就是自己调用自己的组件,常用做树型列表等场景，
+
+实现一个递归组件：`Tree.vue`
+
+```vue
+<template>
+  <div class="tree" v-for="(item, key) in treeData" :key="key">
+    <input type="checkbox" name="" id="" :checked="item.checked" /> <span>{{ item.name }}</span>
+    <Tree v-if="item?.children?.length" :treeData="item.children"></Tree>
+  </div>
+</template>
+
+<script setup lang="ts">
+import { toRefs } from 'vue'
+const props = defineProps(['treeData'])
+const { treeData } = toRefs(props)
+</script>
+
+<style scoped>
+.tree {
+  margin-left: 25px;
+}
+</style>
+```
+
+使用：`App.vue`
+
+```vue
+<template>
+  <div class="content">
+    <Tree :treeData="treeData"></Tree>
+  </div>
+</template>
+
+<script setup lang="ts">
+import Tree from './components/Tree.vue'
+import { reactive } from 'vue'
+    
+interface TreeType {
+  name: string
+  checked: boolean
+  children?: TreeType[]
+}
+
+// 模拟树状数组数据
+const treeData = reactive<TreeType[]>([
+  {
+    name: '树1',
+    checked: false,
+    children: [{ name: '树1-1', checked: false }],
+  },
+  {
+    name: '树2',
+    checked: false,
+    children: [
+      {
+        name: '树2-1',
+        checked: false,
+        children: [
+          {
+            name: '树2-1-1',
+            checked: false,
+          },
+          {
+            name: '树2-1-2',
+            checked: false,
+          },
+        ],
+      },
+      {
+        name: '树2-2',
+        checked: false,
+      },
+    ],
+  },
+  {
+    name: '树3',
+    checked: false,
+    children: [{ name: '树3-1', checked: false }],
+  },
+])
+</script>
+
+<style scoped>
+.content {
+  width: 500px;
+  margin: 12px auto;
+  border: 1px solid black;
+}
+</style>
+```
+
+效果:
+
+![](E:\博客\my-blog\src\学习笔记\前端\vue\mkimages\64ae1f851ddac507ccebecae.png)
+
+### 3.4 修改组件名
+
+在如上案例中，如果们想改组件的名字，就只能改组件文件名,也可以使用再建一个`<script>`的方式
+
+Tree.vue
+
+```vue
+<template>
+  <div class="tree" v-for="(item, key) in treeData" :key="key">
+    <input type="checkbox" name="" id="" :checked="item.checked" /> <span>{{ item.name }}</span>
+     <!--这里可以直接使用Test组件名-->
+    <Test v-if="item?.children?.length" :treeData="item.children"></Test>
+  </div>
+</template>
+
+<script setup lang="ts">
+import { toRefs } from 'vue'
+const props = defineProps(['treeData'])
+const { treeData } = toRefs(props)
+</script>
+
+<script>
+// 文件内修改组件名称
+export default {
+    name: 'Test'
+}
+</script>
+
+<style scoped>
+.tree {
+  margin-left: 25px;
+}
+</style>
+```
+
+也可使用插件：[unplugin-vue-define-options](https://www.npmjs.com/package/unplugin-vue-define-options)
+
+插件在`<setup>`中添加了一个函数`defineOptions()`
+
+```vue
+<script>
+// 直接修改组件名
+defineOptions({
+  name: 'Foo',
+  inheritAttrs: false
+})
+</script>
+```
+
+**在vue3.3+版本中已经支持了该种写法，不需要导入组件**[文档说明](https://cn.vuejs.org/api/sfc-script-setup.html#defineoptions)
+
+我自己也尝试了一种想法，也能实现修改名字的效果,就是通过`import xxx from 'Tree.vue'`也能实现修改组件名的效果， **不建议参考哈，自己的一点小尝试**😂😂😂😂
+
+```vue
+<template>
+  <div class="tree" v-for="(item, key) in treeData" :key="key">
+    <input type="checkbox" name="" id="" :checked="item.checked" /> <span>{{ item.name }}</span>
+    <!--也能达到修改组件名的效果-->
+    <Test v-if="item?.children?.length" :treeData="item.children"></Test>
+  </div>
+</template>
+<script>
+import Test from './Tree.vue'
+</script>
+```
+
+### 3.5 动态组件
+
+我们可以通过`<component :is="">`来动态绑定组件
+
+DynamicState.vue
+
+```vue
+<template>
+  <div>
+    <div class="zay-botton-list">
+      <div v-for="(item, key) in data" :key="key" 
+           class="zay-botton" 
+           :class="{ 'zay-botton--active': key === active }"
+           @click="switchTable(item, key)">
+        	{{ item.name }}
+      </div>
+    </div>
+    <Component :is="comId"></Component>
+  </div>
+</template>
+
+<script setup lang="ts">
+import Avue from './A.vue'
+import Bvue from './B.vue'
+import Cvue from './C.vue'
+
+import { ref, shallowRef, shallowReactive, type Component } from 'vue'
+interface dataType {
+  name: string
+  com: Component
+}
+
+// 这里我们需要使用shallowRef 来代理，使其只监听浅层
+const comId = shallowRef<Component>(Avue)
+const active = ref(0)
+
+const data = shallowReactive<dataType[]>([
+  {
+    name: 'A组件',
+    com: Avue,
+  },
+  {
+    name: 'B组件',
+    com: Bvue,
+  },
+  {
+    name: 'C组件',
+    com: Cvue,
+  },
+])
+
+const switchTable = (item: dataType, index: number) => {
+  comId.value = item.com
+  active.value = index
+}
+</script>
+
+<style scoped lang="scss">
+@include b(botton-list) {
+  display: flex;
+  margin-top: 20px;
+}
+
+@include b(botton) {
+  padding: 8px 10px;
+  border: 1px solid black;
+  margin-right: 10px;
+  @include m(active) {
+    background-color: aqua;
+  }
+}
+</style>
+```
+
+效果：
+
+![](E:\博客\my-blog\src\学习笔记\前端\vue\mkimages\64ae1f851ddac507ccebed10.png)
+
+还可以采用**选项式API**的方式：
+
+```vue
+<script>
+import Avue from './A.vue'
+import Bvue from './B.vue'
+import Cvue from './C.vue'
+
+export default {
+    conponents: {
+        Avue,
+        Bvue,
+        Cvue
+    }
+}
+</script>
+```
+
+使用这种方式，就不需要浅层代理，可以里面直接输入字符串
+
+```javascript
+const data = Reactive([
+  {
+    name: 'A组件',
+    com: 'Avue',
+  },
+  {
+    name: 'B组件',
+    com: 'Bvue',
+  },
+  {
+    name: 'C组件',
+    com: 'Cvue',
+  },
+])
+```
+
+
+
+## 4.插槽
+
+### 4.1 匿名插槽
+
+通过子组件放入一个插槽`<slot>`	
+
+```vue
+<div>
+    <slot></slot>
+</div>
+```
+
+父组件中使用
+
+```vue
+<child>
+	<template v-slot>
+    	<div>
+            插入插槽
+        </div>
+    </template>
+</child>
+```
+
+这是父组件中写的`<template slot>`标签包裹的内容，会被替换到子组件中`<slot>`的位置
+
+
+
+### 4.2 具名插槽
+
+当我们子组件中有多个插槽的时候，这时候我们怎样确定我插入的那个位置呢，这时候可以使用具命插槽。
+
+子组件
+
+```vue
+<div>
+    <slot name="header"></slot>
+    <slot name="main"></slot>
+</div>
+```
+
+父组件
+
+```vue
+<div>
+    <template v-slot="header">
+    	<div>
+            我是头部
+        </div>
+    </template>
+</div>
+```
+
+这时就会被插入到指定的位置
+
+
+
+### 4.3 作用域插槽
+
+如果需要在父组件中，需要拿到子组件的值
+
+子组件
+
+```vue
+<template>
+  <div>
+    <div v-for="item in data">
+      <slot name="header" :data="item"></slot>
+    </div>
+  </div>
+</template>
+
+<script setup lang="ts">
+import { reactive } from 'vue'
+
+const data = reactive([1, 2, 3, 4])
+</script>
+```
+
+父组件
+
+```vue
+<template>
+  <div>
+    <SlotChild>
+      <template v-slot:header="{ data }">{{ data }}</template>
+    </SlotChild>
+  </div>
+</template>
+
+<script setup lang="ts">
+import SlotChild from './SlotChild.vue'
+</script>
+```
+
+通过在父组件的`<template v-slot:header="{data}">`可以将data解构出来,这就是作用域插槽。
+
+
+
