@@ -508,7 +508,7 @@ const treeData = reactive<TreeType[]>([
 
 效果:
 
-![](E:\博客\my-blog\src\学习笔记\前端\vue\mkimages\64ae1f851ddac507ccebecae.png)
+![](https://pic.imgdb.cn/item/64ae1f851ddac507ccebecae.png)
 
 ### 3.4 修改组件名
 
@@ -652,7 +652,7 @@ const switchTable = (item: dataType, index: number) => {
 
 效果：
 
-![](E:\博客\my-blog\src\学习笔记\前端\vue\mkimages\64ae1f851ddac507ccebed10.png)
+![](https://pic.imgdb.cn/item/64ae1f851ddac507ccebed10.png)
 
 还可以采用**选项式API**的方式：
 
