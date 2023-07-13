@@ -915,6 +915,75 @@ onDeactivated(() => {
 </script>
 ```
 
+### 3.9 动画组件
+
+vue提供了transtion（动画）的封装组件,在一下情况下可给任何元素和组件添加进入/离开的过渡动画：
+
+- 条件渲染（v-if）
+- 条件展示(v-show)
+- 动态组件
+- 组件根节点
+
+使用：
+
+```vue
+<template>
+  <div>
+    <button @click="flag = !flag">切换</button>
+    <Transition name="fade">
+      <div v-if="flag" class="box"></div>
+    </Transition>
+  </div>
+</template>
+
+<script setup lang="ts">
+import { ref } from 'vue'
+const flag = ref<boolean>(true)
+</script>
+
+<style scoped>
+.box {
+  width: 200px;
+  height: 200px;
+  background: red;
+}
+/**总共六个class, 通过Transtion 组件上的name 属性来定义class 表示， 如果没有name = 默认是 v-开头**/
+/**进入开始时**/
+.fade-enter-from {
+  width: 0;
+  height: 0;
+}
+/**进入进行中**/
+.fade-enter-active {
+  transition: all 1.5s ease;
+}
+/**进入结束后**/
+.fade-enter-to {
+  width: 200px;
+  height: 200px;
+}
+/**退出开始时**/
+.fade-leave-from {
+  width: 200px;
+  height: 200px;
+}
+/**退出进行中**/
+.fade-leave-active {
+  transition: all 1.5s ease;
+}
+/**退出结束后**/
+.fade-leave-to {
+  width: 0;
+  height: 0;
+}
+</style>
+
+```
+
+
+
+
+
 ## 4.插槽
 
 ### 4.1 匿名插槽
