@@ -977,8 +977,47 @@ const flag = ref<boolean>(true)
   height: 0;
 }
 </style>
-
 ```
+
+第二种方式： 还可直接给`transtion`上添加属性的方式来指定css
+
+```vue
+// 设置进入前动画
+<Transtion enter-from-class="enter-from"></Transtion>
+
+<style>
+    .enter-from {
+        width: 200px;
+        height: 200px;
+    }
+</style>
+```
+
+使用该种方式可以和动画库结合使用
+
+
+
+**使用自定义class 结合animate.css**
+
+安装animate.css
+
+> pnpm install animate.css
+
+在main.ts中导入
+
+>import 'animate.css'
+
+使用：
+
+```vue
+ <Transition enter-active-class="animate__animated animate__bounce">
+      <div v-if="flag" class="box"></div>
+ </Transition>
+```
+
+
+
+
 
 
 
