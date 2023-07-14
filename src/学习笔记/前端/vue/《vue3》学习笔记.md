@@ -818,7 +818,7 @@ export const axios = {
       xhr.open('GET', url)
 
       xhr.onreadystatechange = () => {
-        if (xhr.readyType === 4 && xhr.status === 200) {
+        if (xhr.readyState === 4 && xhr.status === 200) {
           resolve(JSON.parse(xhr.responseText))
         }
       }
