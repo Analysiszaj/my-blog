@@ -6,6 +6,7 @@ sidebar: heading
 tag: [Vue3, 技术分享]
 category: 前端
 date: 2023-07-16
+star: 1
 ---
 
 # vue3 实现掘金博客文章页

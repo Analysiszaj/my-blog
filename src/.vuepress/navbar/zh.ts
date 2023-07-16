@@ -5,7 +5,7 @@ export const zhNavbar = navbar([
   {
     text: '学习笔记',
     icon: 'edit',
-    prefix: '/学习笔记',
+    prefix: '/docs',
     children: [
       {
         text: '前端',
