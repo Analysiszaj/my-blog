@@ -917,7 +917,7 @@ onDeactivated(() => {
 
 ### 3.9 动画组件
 
-vue提供了transtion（动画）的封装组件,在一下情况下可给任何元素和组件添加进入/离开的过渡动画：
+vue 提供了 transtion（动画）的封装组件,在一下情况下可给任何元素和组件添加进入/离开的过渡动画：
 
 - 条件渲染（v-if）
 - 条件展示(v-show)
@@ -979,49 +979,39 @@ const flag = ref<boolean>(true)
 </style>
 ```
 
-第二种方式： 还可直接给`transtion`上添加属性的方式来指定css
+第二种方式： 还可直接给`transtion`上添加属性的方式来指定 css
 
 ```vue
 // 设置进入前动画
 <Transtion enter-from-class="enter-from"></Transtion>
 
 <style>
-    .enter-from {
-        width: 200px;
-        height: 200px;
-    }
+.enter-from {
+  width: 200px;
+  height: 200px;
+}
 </style>
 ```
 
 使用该种方式可以和动画库结合使用
 
+**使用自定义 class 结合 animate.css**
 
-
-**使用自定义class 结合animate.css**
-
-安装animate.css
+安装 animate.css
 
 > pnpm install animate.css
 
-在main.ts中导入
+在 main.ts 中导入
 
->import 'animate.css'
+> import 'animate.css'
 
 使用：
 
 ```vue
- <Transition enter-active-class="animate__animated animate__bounce">
+<Transition enter-active-class="animate__animated animate__bounce">
       <div v-if="flag" class="box"></div>
  </Transition>
 ```
-
-
-
-
-
-
-
-
 
 ## 4.插槽
 
