@@ -1008,10 +1008,244 @@ const flag = ref<boolean>(true)
 使用：
 
 ```vue
+// 结合animate.css 进入进行中
 <Transition enter-active-class="animate__animated animate__bounce">
-      <div v-if="flag" class="box"></div>
- </Transition>
+   <div v-if="flag" class="box"></div>
+</Transition>
 ```
+
+**transition 的生命周期**
+
+```html
+@before-enter="beforeEnter" // 对应enter-from @enter="enter" // 对应enter-active @after-enter="afterEnter" // 对应enter-to @enter-cancelled="enterCancelled" // 显示过渡打断 @before-leave="beforeLeave" // 对应leave-from @leave="leave" //
+对应leave-active @after-leave="afterLeave" // 对应leave-to @leave-cancelled="leaveCancelled" // 离开过渡打断
+```
+
+**GreenSock js 动画库的使用**
+
+```vue
+<template>
+  <div>
+    <button @click="flag = !flag">切换</button>
+    <!-- <Transition enter-active-class="animate__animated animate__bounce">
+      <div v-if="flag" class="box"></div>
+    </Transition> -->
+    <Transition @before-enter="EnterFrom" @enter="EnterActive" @after-enter="EnterTo" @enter-cancelled="EnterCancel" @leave="Leave">
+      <div v-if="flag" class="box"></div>
+    </Transition>
+  </div>
+</template>
+
+<script setup lang="ts">
+import gsap from 'gsap'
+import { ref } from 'vue'
+const flag = ref<boolean>(true)
+
+const EnterFrom = (el: Element) => {
+  gsap.set(el, {
+    width: 0,
+    height: 0,
+  })
+}
+const EnterActive = (el: Element, done: gsap.Callback) => {
+  gsap.to(el, {
+    width: 200,
+    height: 200,
+    onComplete: done,
+  })
+}
+const Leave = (el: Element, done: gsap.Callback) => {
+  gsap.to(el, {
+    width: 0,
+    height: 0,
+    onComplete: done,
+  })
+}
+</script>
+
+<style scoped>
+.box {
+  width: 200px;
+  height: 200px;
+  background: red;
+}
+</style>
+```
+
+还可以通过`appear` 设置初始节点过渡，就是页面加载完成就开始动画对应三个状态
+
+```vue
+<transition appear appear-from-class="from" appear-active-class="active" appear-to-class="to">
+
+</transition>
+
+<style>
+.from {
+  width: 0px;
+  height: 0px;
+}
+.active {
+  transition: all 2s ease;
+}
+.to {
+  width: 200px;
+  height: 200px;
+}
+</style>
+```
+
+### 3.10 过渡列表
+
+过渡列表组件`TransitionGroup`不同于`Transition`组件内只能有一个元素,`TransitionGroup`内可以有多个元素,除这点不同以外，其他的用法和`Transition`组件一样。
+
+**使用 TransitionGroup+animate**
+
+```vue
+<template>
+  <div>
+    <button @click="pushHandle">push</button>
+    <button @click="popHandle">pop</button>
+    <div class="list-style">
+      <transition-group enter-active-class="animate__animated animate__rotateInUpLeft" leave-active-class="animate__animated animate__rotateOutDownLeft">
+        <div v-for="(item, key) in list" :key="key" class="item-style">{{ item }}</div>
+      </transition-group>
+    </div>
+  </div>
+</template>
+
+<script setup lang="ts">
+import { reactive } from 'vue'
+const list = reactive([1, 2, 3, 4, 5])
+
+const pushHandle = () => {
+  list.push(list.length + 1)
+}
+const popHandle = () => {
+  list.pop()
+}
+</script>
+
+<style scoped>
+.list-style {
+  display: flex;
+  margin-top: 12px;
+}
+
+.item-style {
+  width: 20px;
+  height: 20px;
+  text-align: center;
+  line-height: 20px;
+  border: 1px solid black;
+  cursor: pointer;
+}
+</style>
+```
+
+**踩坑:一定要绑定 key 不然 push 的时候没有动画**😅😅
+
+参考 vue 官网说明：https://cn.vuejs.org/guide/built-ins/transition-group.html#differences-from-transition
+
+效果：
+
+![](https://pic.imgdb.cn/item/64b55ecd1ddac507cce503f2.gif)
+
+**平面过渡**
+
+实现随机列表的效果
+
+```vue
+<template>
+  <div>
+    <button @click="random">random</button>
+    <transition-group tag="div" class="wraps" move-class="mmm">
+      <!--一定要绑定自己的key, 能用for(item,key) in list 这个key, 因为他每次都是重新开始的，并像自己设定的，绑定具体对象-->
+      <div v-for="(item, key) in list" :key="item.id" class="item-box">{{ item.number }}</div>
+    </transition-group>
+  </div>
+</template>
+
+<script setup lang="ts">
+import { ref } from 'vue'
+import _ from 'lodash'
+const list = ref(
+  Array.apply(null, { length: 81 } as number[]).map((_, index) => {
+    return {
+      id: index,
+      number: (index % 9) + 1,
+    }
+  })
+)
+
+const random = () => {
+  list.value = _.shuffle(list.value)
+}
+</script>
+
+<style scoped>
+.wraps {
+  display: flex;
+  flex-wrap: wrap;
+  width: 200px;
+}
+.item-box {
+  width: 20px;
+  height: 20px;
+  text-align: center;
+  line-height: 20px;
+  border: 1px solid black;
+}
+.mmm {
+  transition: all 1s;
+}
+</style>
+```
+
+效果:
+
+![](https://pic.imgdb.cn/item/64b55ecd1ddac507cce502f5.gif)
+
+**状态过渡**
+
+vue 同样可以给数字 Svg 背景颜色等添加过渡动画
+
+数组递增效果
+
+```vue
+<template>
+  <div>
+    <input type="number" step="20" v-model="number.current" />
+    <div>
+      {{ number.tweenedNumber.toFixed(0) }}
+    </div>
+  </div>
+</template>
+
+<script setup lang="ts">
+import { reactive, watch } from 'vue'
+import gsap from 'gsap'
+const number = reactive({
+  current: 0,
+  tweenedNumber: 0,
+})
+
+watch(
+  () => number.current,
+  (newVal, oldVal) => {
+    gsap.to(number, {
+      duration: 1,
+      tweenedNumber: newVal,
+    })
+  }
+)
+</script>
+
+<style scoped></style>
+```
+
+效果：
+
+![](https://pic.imgdb.cn/item/64b55ece1ddac507cce507b7.gif)
 
 ## 4.插槽
 
@@ -1105,3 +1339,42 @@ import SlotChild from './SlotChild.vue'
 ```
 
 通过在父组件的`<template v-slot:header="{data}">`可以将 data 解构出来,这就是作用域插槽。
+
+## 5.依赖注入
+
+通常我我们需要需要像子组件传递参数的时候可以使用`props`，如果需要向深层次的子组件传递参数如果仅仅通过 props, 则只能将其沿着组件链逐级传递下去，这会非常麻烦。（prop 逐级透传）
+
+这是侯我们可以使用`provide`, `inject`. 可以通过`provide` 传递指定的值， 通过在任意深度的子组件中通过`inject`获取到。
+
+父组件
+
+```vue
+<script setup lang="ts">
+import ProvideB from './ProvideB.vue'
+import { provide, ref } from 'vue'
+const color = ref('')
+provide('color', color)
+</script>
+```
+
+子组件
+
+```vue
+<script setup lang="ts">
+import ProvideC from './ProvideC.vue'
+import { inject, ref } from 'vue'
+const color = inject('color')
+</script>
+```
+
+这样写修改子组件也会影响父组件.如果想要子组件无法修改父组件,需要到设置`provide`中的值为`readonly`
+
+```vue
+<script setup lang="ts">
+import ProvideB from './ProvideB.vue'
+import { provide, ref } from 'vue'
+const color = ref('')
+
+provide('color', readonly(color))
+</script>
+```
