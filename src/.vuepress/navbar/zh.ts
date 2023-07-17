@@ -21,4 +21,9 @@ export const zhNavbar = navbar([
       },
     ],
   },
+  {
+    text: '友情链接',
+    icon: 'link',
+    link: '/friend',
+  },
 ])
