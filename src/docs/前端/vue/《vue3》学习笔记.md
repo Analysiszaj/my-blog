@@ -1378,3 +1378,101 @@ const color = ref('')
 provide('color', readonly(color))
 </script>
 ```
+
+## 6.事件总线
+
+兄弟组件通信， 可以通过父组件做一个传递, 也可也使用事件总线的方式进行传递。
+
+在 vue2 中我们可以通过`this.prototype.$bus = new Vue()` 的方式来使用全局事件总线，但是在 vue3 中, prototype 属性就被取消了。在 vue3 中推荐使用 mitt 这一三方库，Mitt 来实现。
+
+### 6.1 Mitt
+
+安装
+
+> pnpm install mitt -S
+
+初始化在 main.ts
+
+```typescript
+import './assets/main.css'
+import 'animate.css'
+import { createApp } from 'vue'
+import App from './App.vue'
+import mitt from 'mitt'
+
+const Mit = mitt()
+
+const app = createApp(App)
+
+// 提供ts类型支持
+declare module 'vue' {
+  export interface ComponentCustomProperties {
+    $Bus: typeof Mit
+  }
+}
+
+app.config.globalProperties.$bus = Mit
+
+app.mount('#app')
+```
+
+使用
+
+```vue
+<template>
+  <div>
+    <button @click="emit">传送</button>
+  </div>
+</template>
+
+<script setup lang="ts">
+import { getCurrentInstance } from 'vue'
+const instance = getCurrentInstance()
+
+const emit = () => {
+  instance?.proxy?.$Bus.emit('on-click', '传送')
+}
+</script>
+
+<style scoped></style>
+```
+
+- `getCurrentInstance` 获取当前组件实例
+
+### 6.2 Bus 的实现
+
+```typescript
+type BusClass = {
+    emit: (name: string):void
+    on:(name: string, callback:Function):void
+}
+
+type PramsKey = string | number | symbol
+type List = {
+    [key:PramsKey]:Array<Function>
+}
+
+class Bus implements BusClass {
+    list: list
+    constructor() {
+        this.list = {}
+    }
+
+    emit(name:string, ...args:Array<any>){
+        let eventName:Array<Function> = this.list[name]
+        eventName.forEach(fn => {
+            fn.apply(this, args)
+        })
+    }
+
+    on(name:string, callback:Function) {
+        let fn:Array<Function> = this.list[name] || []
+        fn.push(callback)
+        this.list[name] = fn
+    }
+}
+```
+
+## 7.TSX
+
+我们之前的使用都是通过`Template`的方式去写我们的模板,现在可以扩展另外一种方式`TSX`
