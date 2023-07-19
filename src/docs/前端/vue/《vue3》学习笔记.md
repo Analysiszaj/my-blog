@@ -1476,3 +1476,95 @@ class Bus implements BusClass {
 ## 7.TSX
 
 我们之前的使用都是通过`Template`的方式去写我们的模板,现在可以扩展另外一种方式`TSX`
+
+**使用 TSX**
+
+- 方式一:直接返回一个渲染函数
+
+Test.tsx
+
+```typescript
+import default function(){
+    return (<div>哈哈哈</div>)
+}
+```
+
+App.vue 中直接导入组件
+
+```vue
+<template>
+  <Test></Test>
+</template>
+
+<script>
+import Test from '.rander/test'
+</script>
+```
+
+需要先配置否则 vite 会报错
+
+安装指定包
+
+> pnpm install vitejs/plugin-vue-jsx
+
+配置 vite.config.js
+
+```javascript
+import { fileURLToPath, URL } from 'node:url'
+
+import { defineConfig } from 'vite'
+import vue from '@vitejs/plugin-vue'
+import vueJsx from '@vitejs/plugin-vue-jsx'
+
+// https://vitejs.dev/config/
+export default defineConfig({
+  plugins: [vue(), vueJsx()],
+  resolve: {
+    alias: {
+      '@': fileURLToPath(new URL('./src', import.meta.url)),
+    },
+  },
+  css: {
+    preprocessorOptions: {
+      scss: {
+        additionalData: `@import "./src/bem.scss";`,
+      },
+    },
+  },
+})
+```
+
+- 方式二：通过 vue 中的`defineComponent`(optionsAPI)
+
+Test.tsx
+
+```typescript
+import { defineComponent } from 'vue'
+export default defineComponent({
+  data() {
+    return {
+      age: 23,
+    }
+  },
+
+  render() {
+    // 在template 中是双括号，在jsx语法中是用的单括号
+    return <div>{this.age}</div>
+  },
+})
+```
+
+- 方式三：`defineComponent` + `setup`
+
+```typescript
+import { defineComponent } from 'vue'
+export default defineComponent({
+  setup() {
+    return () => <div>hhahah</div>
+  },
+})
+```
+
+注意：
+
+- ref 在 jsx 中不会自动解包需要自己`.value`
