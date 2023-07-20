@@ -1568,3 +1568,246 @@ export default defineComponent({
 注意：
 
 - ref 在 jsx 中不会自动解包需要自己`.value`
+
+```tsx
+import { defineComponent } from 'vue'
+export default defineComponent({
+  setup() {
+    const data = ref('aa')
+    return <div>{data.value}</div>
+  },
+})
+```
+
+**tsx 中使用事件和 props，emit**
+
+```tsx
+import {defineComponent} from 'vue'
+export default defineComponent({
+    props: {
+    	name: String,
+  	},
+  	emits: ['on-click'],
+    // 需传入, 传入emit
+    setup(props, {emit}){
+        const data = ref('aa')
+        const fn = () => {
+            console.log('haha')
+        }
+        return (
+            <div>{data.value}</div>
+            <div>{props.name}</div>
+            // 在tsx中绑定事件不在是@ 而是直接on-click
+            // 不能打括号，否则会进入就会默认执行了一次， 如果需要传递参数则：
+            // <button onClick={() => fn('参数1')}></button>
+            <button onClick={fn}></button>
+        )
+    }
+})
+```
+
+**tsx 中使用 slot**
+
+```tsx
+import {defineComponent} from 'vue'
+
+// 定义插槽
+const A = (_, {slots}) => (<>
+    	<div>{slots.default ? slots.default() : '默认值'}</div>
+    	<div>{slot.foo?.()}</div>
+    </>)
+
+export default defineComponent({
+   	setup() {
+
+       // 定义插槽内容
+       const slots = {
+           default: () => (<div>default slot</div>)
+           foo: () => (<div>zaj slots</div>)
+       }
+
+    	return () => (<>
+    		<A v-slots={slots}></A>
+    	</>)
+    }
+})
+```
+
+### 7.2 实现一个 vite 插件解析 tsx
+
+我们在 vue 编写 tsx 的时候， 是事先导入了一个插件`@vitejs/plugin-vue-jsx`，如果没有导入该插件， 运行时会报错， 现在我们来自己实现一个 解析 tsx 的插件
+
+1.安装插件
+
+> pnpm install @vue/babel-plugin-jsx
+>
+> pnpm install @babel/core
+>
+> pnpm install @babel/plugin-transform-typescript
+>
+> pnpm install @babel/plugin-syntax-import-meta
+>
+> pnpm install @types/babel\_\_core
+
+2.编写插件代码
+
+```typescript
+import type { Plugin } from 'vite'
+import * as babel from '@babel/core'
+import jsx from '@vue/babel-plugin-jsx'
+
+export default function (): Plugin {
+  return {
+    name: 'vite-plugin-vue-tsx',
+    config(config) {
+      return {
+        esbuild: {
+          include: /\.ts$/,
+        },
+      }
+    },
+    async transform(code, id) {
+      if (/.tsx$/.test(id)) {
+        //@ts-ignore
+        const ts = await import('@babel/plugin-transform-typescript').then((r) => r.default)
+        const res = await babel.transformAsync(code, {
+          ast: true,
+          configFile: false,
+          babelrc: false,
+          plugins: [jsx, [ts, { isTSX: true, allowExtensions: true }]],
+        })
+        return res?.code
+      }
+      return code
+    },
+  }
+}
+```
+
+`@vitejs/plugin-vue-jsx`这个插件的原理就是使用了`@vue/babel-plugin-jsx` 和`@babel/plugin-transform-typescript`这两个插件实现。
+
+### 7.3 自动导入插件
+
+antfu 大神写的自动导入插件[unplugin-auto-import](https://github.com/antfu/unplugin-auto-import)
+
+可以帮我们简化代码的书写
+
+之前我们使用`ref`， `reactive`等需要
+
+```typescript
+import { computed, ref } from 'vue'
+
+const count = ref(0)
+const doubled = computed(() => count.value * 2)
+```
+
+现在不需要导入可以直接使用
+
+```typescript
+const count = ref(0)
+const doubled = computed(() => count.value * 2)
+```
+
+使用
+
+> pnpm i unplugin-auto-import
+
+在 vite.config.js 中配置
+
+```typescript
+import AutoImport from 'unplugin-auto-import/vite'
+
+export default defineConfig({
+  plugins: [
+    AutoImport({
+      imports: ['vue'],
+      dts: 'src/auto-import.d.ts', // 需要生成到一个地方
+    }),
+  ],
+})
+```
+
+这样就可以在 template 中直写入而不需要事先 import
+
+## 8.v-model
+
+`v-model`在 vue3 中其实是一个语法糖 通过 props 和 emits 组合而成， 在 vue3 中：
+
+- 通过 props（默认值为 modelValue） 和 emits 中`update:modelValue`事件
+- vue2 中 `v-bind.sync`修饰符和组件 model 选项已移除
+- 新增支持多个 v-model
+
+使用
+
+父组件
+
+```vue
+<template>
+  <div>
+    <button @click="isShow = !isShow">切换</button>
+    <B v-model="isShow"></B>
+  </div>
+</template>
+
+<script setup lang="ts">
+import B from './B.vue'
+import { ref } from 'vue'
+const isShow = ref<boolean>(true)
+</script>
+
+<style scoped></style>
+```
+
+子组件：
+
+```vue
+<template>
+  <div>{{ modelValue }}</div>
+  <button @click="update">修改</button>
+</template>
+
+<script setup lang="ts">
+const props = defineProps<{
+  modelValue: boolean
+}>()
+
+const emits = defineEmits(['update:modelValue'])
+// 子组件修改绑定的值
+const update = () => {
+  emits('update:modelValue', !props.modelValue)
+}
+</script>
+
+<style scoped></style>
+```
+
+也可以绑定多个值
+
+```vue
+<script setup lang="ts">
+const props = defineProps<{
+  modelValue: boolean,
+  lastVal: string
+}>()
+
+const emits = defineEmits(['update:modelValue', 'update:lastVal'])
+```
+
+**自定义修饰符**
+
+vue3 也支持自定义修饰符,只需要在`defineProps`中添加绑定的属性名 + `Modifiers`
+
+```vue
+// 父组件中
+<B v-model="isShow" v-model:lastVal.hah="lastVal"></B>
+
+// 子组件的script中
+<script setup lang="ts">
+const props = defineProps<{
+  modelValue: boolean,
+  lastVal: string
+  lastValModifiers?:{
+    hah:boolean
+}
+}>()
+```
