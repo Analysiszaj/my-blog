@@ -1811,3 +1811,85 @@ const props = defineProps<{
 }
 }>()
 ```
+
+## 9.自定义指令
+
+处理 vue 内置的指令如`v-if`,`v-show`等等这些之外，还可以自定义指令
+
+自定义指令的生命周期函数总共有七个，分别是`created`, `beforeMount`, `mounted`, `beforeUpdate`,`updated`, `beforeUnmount`,`unmounted`
+
+```vue
+<template>
+  <div v-move:aaa.test="{ background: 'red' }" class="test"></div>
+</template>
+
+<script setup lang="ts">
+import type { DirectiveBinding } from 'vue'
+import { type Directive } from 'vue'
+
+type Dir = {
+  background: string
+}
+
+const vMove: Directive = {
+  created() {
+    console.log('元素初始化时候')
+  },
+  beforeMount() {
+    console.log('指令绑定到元素后调用 只调用一次')
+  },
+  mounted(el: HTMLElement, dir: DirectiveBinding<Dir>) {
+    el.style.backgroundColor = dir.value.background
+    console.log('元素插入父级dom调用')
+  },
+  beforeUpdate() {
+    console.log('元素更新之前调用')
+  },
+  updated() {
+    console.log('及他自己的所有子节点都更新后调用')
+  },
+}
+</script>
+```
+
+传入的参数主要是：
+
+- `el`代表绑定的元素,
+- `dir`代表传入的参数如上通过
+  - `dir.value` 能看到绑定的值，
+  - 通过`dir.modifiers`能拿到你的修饰符如上的`.test`，
+  - 通过`dir.arg`能够拿到参数名如上例子中的`aaa`
+
+其他参数参考官网:[自定义指令](https://cn.vuejs.org/guide/reusability/custom-directives.html#directive-hooks)
+
+### 9.1 实用常见(按钮级别鉴权)
+
+```vue
+<template>
+  <div>
+    <button v-has-show="'shop:edit'">创建</button>
+    <button v-has-show="'shop:create'">编辑</button>
+    <button v-has-show="'shop:delete'">删除</button>
+  </div>
+</template>
+
+<script setup lang="ts">
+import { ref, reactive } from 'vue'
+import type { Directive } from 'vue'
+
+localStorage.setItem('userId', 'zaj')
+
+// 后台数据
+const permission = ['zaj:shop:edit', 'zaj:shop:create', 'zaj:shop:delete']
+
+const userId = localStorage.getItem('userId') as string
+// 自定义指令判断当前参数在没有在后端传过来的权限列表，如果没用就将按钮隐藏
+const vHasShow: Directive<HTMLElement, string> = (el, bingding) => {
+  if (!permission.includes(userId + ':' + bingding.value)) {
+    el.style.display = 'none'
+  }
+}
+</script>
+
+<style scoped></style>
+```
