@@ -1893,3 +1893,126 @@ const vHasShow: Directive<HTMLElement, string> = (el, bingding) => {
 
 <style scoped></style>
 ```
+
+### 9.2 图片懒加载
+
+```vue
+<template>
+  <div>
+    <div class="content-box">
+      <img v-lazy="item" v-for="item in arr" alt="" srcset="" />
+    </div>
+  </div>
+</template>
+
+<script setup lang="ts">
+import type { Directive } from 'vue'
+
+// glob 是懒加载模式， 类似通过 () => import ('xxxx')
+// globEager 静态加载  类似直接 import xxx from 'xxx' 已弃用（可以通过glob后面带参数 eager:true)
+// Record 是TypeScript的工具类，可以构建一个对象类型, 以下案例中属性键为 string, 属性的类型为 {defalut: string}
+let imageList: Record<string, { default: string }> = import.meta.glob('E://壁纸/*.*', { eager: true })
+let arr = Object.values(imageList).map((item) => {
+  return item.default
+})
+
+const vLazy: Directive<HTMLImageElement, string> = async (el, bingding) => {
+  const def = await import('../assets/logo.svg')
+  el.src = def.default
+  const observer = new IntersectionObserver((enr) => {
+    if (enr[0].intersectionRatio > 0) {
+      setTimeout(() => {
+        el.src = bingding.value
+      }, 1000)
+
+      console.log(enr[0])
+      observer.unobserve(el)
+    }
+  })
+  observer.observe(el)
+}
+</script>
+
+<style scoped>
+.content-box {
+  width: 1000px;
+  border: 1px solid black;
+}
+.content-box img {
+  width: 100%;
+}
+</style>
+```
+
+## 10.Hooks
+
+Hook 主要用于处理代码逻辑的一些封装, 类似于 vue2 中的 mixin 混入，不同的是 mixin 是个对象， 而 Hook 是个函数,vue 中也有自带的 hook`useAttrs`,`useSlots`
+
+- `useAttrs()`: 会获取到组件上所有的属性
+- `useSlots()` : 回获取组件中的插槽
+
+### 10.1 实现一个 hook
+
+自定义一个转图片为 base64 的 hook
+
+```typescript
+import { onMounted } from 'vue'
+
+type options = {
+  el: string
+}
+
+export default function (options: options) {
+  return new Promise((resolve) => {
+    onMounted(() => {
+      let img: HTMLImageElement = document.querySelector(options.el) as HTMLImageElement
+      console.log(img, '=======>')
+
+      // 在图片加载完后执行
+      img.onload = () => {
+        resolve(base64(img))
+      }
+    })
+
+    // 通过canvas 将图片转为base64
+    const base64 = (el: HTMLImageElement) => {
+      const canvas = document.createElement('canvas')
+      const ctx = canvas.getContext('2d')
+      canvas.width = el.width
+      canvas.height = el.height
+
+      ctx?.drawImage(el, 0, 0, canvas.width, canvas.height)
+      // cnavas的api 将图片转换为base64
+      return canvas.toDataURL('image/')
+    }
+  })
+}
+```
+
+使用
+
+```vue
+<template>
+  <div>
+    <img id="img" src="../assets/logo.svg" alt="" srcset="" />
+  </div>
+</template>
+
+<script setup lang="ts">
+import useBase64 from '@/hooks/index'
+
+useBase64({
+  el: '#img',
+}).then((res) => {
+  // data:image/png;base64,iVBORw0KGgoAAAANSU.....
+  console.log(res)
+})
+</script>
+
+<style scoped>
+img {
+  width: 100px;
+  height: 100px;
+}
+</style>
+```
