@@ -2016,3 +2016,146 @@ img {
 }
 </style>
 ```
+
+### 10.2 综合案例
+
+实现一个函数同时支持 hook 和自定义指令，去监听 dom 宽高，然后发布到 npm 上
+
+**编写文件**
+
+1.先创建一个文件夹，然后再文件夹中创建， `src/index.ts`
+
+```typescript
+const userResize(el:HTMLElement, callback:Function) => {
+    let resize = new ResieObserver((entries) => {
+        callback(entries[0].contentRect)
+    })
+    resize.observe(el)
+}
+
+const install = (app: App) => {
+    app.directive('resize', {
+        mounted(el: HTMLElement, binding) {
+            userResize(el, binding.value)
+        }
+    })
+}
+userResize.install = install
+export defalut userResize
+```
+
+2.编写 typeScript 类型支持 `index.d.ts`文件
+
+```typescript
+dedeclare const userResize: {
+  (el: HTMLElement, callback: Function): void
+  install: (app: App) => void
+}
+export default userResize
+
+```
+
+3.初始化 npm 和 ts
+
+> pnpm init
+>
+> tsc --init
+
+4.配置打包选项 `vite.config.js`
+
+```javascript
+import {defineConfig} from 'vite'
+export default defineConfig({
+    build: {
+        // 打包路径，和名称
+        lib: {
+            entry: 'src/index.ts',
+            name: 'MyLib'
+        }，
+        rollupoPtions: {
+        external: ['vue'],
+    	output: {
+  			globals: {
+    			MyLib: 'MyLib'
+			}
+		}
+    }
+  }
+})
+```
+
+4.在 package.json 配置好打包命令`"build":vite build`， 然后 npm 运行
+
+5.配置好 package.json
+
+```json
+{
+  "name": "v-resize-lh",
+  "version": "1.0.0",
+  "description": "",
+  // main 当使用require时用的这个
+  "main": "dist/v-resize-xm.umd.js",
+  // 当使用import 时用的这个
+  "module": "dist/v-resize-lh.mjs",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build": "vite build"
+  },
+  "keywords": [],
+  // 配置好要发布上去的文件
+  "files": ["dist", "index.d.ts"],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "vite": "^4.4.6",
+    "vue": "^3.3.4"
+  }
+}
+```
+
+**发布 npm**
+
+6.发布 npm 需要 npm 账户， 没有需要创建, 注意：需要切换回官方的镜像仓库`npm config set registry https://registry.npmjs.org/`
+
+> npm adduser
+
+7.登录，然后运行
+
+> npm publish
+
+在 npm 官网上即可看到自己的包
+
+![](https://s1.ax1x.com/2023/07/23/pCLnoge.png)
+
+使用：
+
+![](https://s1.ax1x.com/2023/07/23/pCLnI3D.png)
+
+在 app.vue 中
+
+```vue
+<template>
+  <div class="test"></div>
+</template>
+
+<script>
+import userResize from 'v-resize-lh'
+onMounted(() => {
+  userResize(document.querySelector('.test') as HTMLElement, function () {
+    console.log('hahah')
+  })
+})
+</script>
+
+<style>
+.test {
+  width: 200px;
+  height: 200px;
+  border: 1px solid black;
+  resize: both;
+  overflow: hidden;
+}
+</style>
+```
+
+这时拖动框框，就能调用回调函数
