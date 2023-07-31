@@ -2159,3 +2159,160 @@ onMounted(() => {
 ```
 
 这时拖动框框，就能调用回调函数
+
+## 11.全局变量
+
+由于 vue3 没有 Prototype 属性，使用`app.config.globalProperties`代替然后去定义变量和函数
+
+在 main.ts 文件里面
+
+```ts
+app.config.globalProperties.$env = 'env'
+```
+
+在页面中可以直接使用
+
+```html
+<div>{{$env}}</div>
+```
+
+在`<scirpt>` 中需要使用`getCurrentInstance` 获取当前实例
+
+```vue
+<script>
+import { getCurrentInstance } from 'vue'
+const app = getCurrentInstance()
+console.log(app?.proxy.$env)
+</script>
+```
+
+在 ts 中需要添加类型注释
+
+```typescript
+declare module 'vue' {
+  export interface ComponentCustomProperties {
+    $env: string
+  }
+}
+```
+
+## 12.自定义插件
+
+自定义插件的核心就是要实现`install`方法，在 vue3 中`app.use`会调用插件中的 install 方法，来实现加载插件
+
+自己编写一个 loading 插件.
+
+新建一个 Loading 文件夹，在之中新增两个文件`index.ts`, `index.vue`
+
+index.vue
+
+```vue
+<template>
+  <div>Loading.....</div>
+</template>
+
+<script>
+const is Show = ref<boolean>(false)
+   const show = () => {
+       isShow.value = true
+   }
+   const hide = () => {
+       isShow.value = false
+   }
+
+   defineExpose({
+       show,
+       hide
+   })
+</script>
+
+<style>
+.loading-content {
+  width: 100%;
+  height: 100%;
+  background-color: antiquewhite;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+</style>
+```
+
+index.ts
+
+```typescript
+import {createVNode, type App, type VNode} from 'vue'
+import Loading from './index.vue
+import {render} from 'vue
+export default {
+    install(app: App){
+        const vnode:VNode = createVNode(Loading)
+        render(vnode, document.body)
+
+        app.config.globalProperties.$loading = {
+            show: vnode.component?.exposed?.show,
+            hide: vnode.component?.exposed?.hide
+        }
+    }
+}
+```
+
+然后再 main.ts 中注册
+
+main.ts
+
+```typescript
+import Loading from './components/Loading'
+
+const app = createApp(App)
+
+app.use(Loading)
+
+// 在ts中需要定义类型，不然会爆红
+declare module 'vue' {
+  export interface ComponentCustomProperties {
+    $loading: {
+      show: () => void
+      hide: () => void
+    }
+  }
+}
+```
+
+页面中使用
+
+```vue
+<script>
+import { getCurrentInstance } from 'vue'
+const instance = getCurrentInstance()
+const show = () => {
+  instance?.proxy?.$loading.show()
+}
+</script>
+```
+
+#### 12.1 自己实现一个简单 use
+
+```typescript
+import {app}  from './main'
+interface Use {
+    install:(app:App, ...options:any[]) => void
+}
+
+const install  = new Set()
+
+
+export function MyUse<T extend Use>(plugin: T) {
+    if(installList.has(plugin)){
+        console.error('注册过')
+    }else{
+        install.add(plugin)
+        plugin.install(app, ...options)
+    }
+
+}
+```
+
+### 13.Scoped 和样式穿透
+
+scoped 的原理就是给每个 css 样式添加唯一不重复的标记：data-v-hash, 在每句 css 选择器的末尾加一个当前组件的 data 属性选择器，组件内部如果包
