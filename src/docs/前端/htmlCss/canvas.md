@@ -111,7 +111,7 @@ Canvas 对象表示一个 HTML 画布元素 `<canvas>`它没有自己的行为�
 
 效果：
 
-![QQ录屏20230802111251](E:\前端\基础\canvas\mkimages\QQ录屏20230802111251.gif)
+![](https://pic.imgdb.cn/item/64caf7e91ddac507ccaad5b1.gif)
 
 除了以上的写法，我们也可以将它们单独分开写
 
@@ -195,7 +195,7 @@ draw(300, 225, 25, 0, Math.PI * 2)
 
 效果
 
-![image-20230802123147447](https://s1.ax1x.com/2023/08/02/pPP7YdO.png)
+![](https://s1.ax1x.com/2023/08/02/pPP7YdO.png)
 
 上面我们每次都需要使用`beginPath()`和`closePath()`来控制画笔，我们也可以使用`moveTo`函数来进行移动画笔
 
