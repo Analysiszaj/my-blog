@@ -299,5 +299,171 @@ headPath.moveTo(250, 250)
 headPath.bezierCurveTo(225, 200, 125, 225, 250, 350)
 headPath.moveTo(250, 250)
 headPath.bezierCurveTo(275, 200, 375, 225, 250, 350)
+// 只需要把Path2D 对象传入绘制就可以在指定位置绘制相应的路径
 ctx.stroke(headPath)
 ```
+
+也可以用 svg 的方式进行创建
+
+```javascript
+// M10 10 移动到10*10的位置  h 水平 80 v 垂直 80 h 水平 -80 z 回到原位
+// 正方形的格式
+const ployline = new Path2D('M10 10 h 80 v 80 h -80 z')
+ctx.stroke(ployline)
+```
+
+### 3.6 颜色控制
+
+在 canvas 中如果我们想给图形上色，可以利用以下属性：
+
+- `fillStyle`: 设置填充颜色
+- `strokeStyle`：设置线段颜色
+- `globalAlpha`: 设置全局透明度
+
+> fillStyle = "red" // 设置颜色为红色
+
+给爱心上色
+
+```javascript
+const canvas = document.querySelector('#canvas1')
+const ctx = canvas.getContext('2d')
+
+const path = new Path2D()
+path.moveTo(250, 250)
+path.bezierCurveTo(225, 200, 125, 225, 250, 350)
+path.moveTo(250, 250)
+path.bezierCurveTo(275, 200, 375, 225, 250, 350)
+
+ctx.strokeStyle = 'red'
+ctx.fillStyle = 'pink'
+
+ctx.stroke(path)
+ctx.fill(path)
+```
+
+效果：
+
+![](https://s1.ax1x.com/2023/08/04/pPk98g0.png)
+
+我们也可以绘制渐变的颜色
+
+- **线性渐变**
+
+> // 构建线性渐变（坐标 x,坐标 y,坐标 x,坐标 y）
+>
+> let linearGradient = ctx.createLinearGradient(100, 200, 300, 300)
+>
+> linearGradient.addColorStop(0, 'red')
+>
+> linearGradient.addColorStop(1, 'blue')
+>
+> ctx.fillstyle = linearGradient
+>
+> ctx.fillSRect(100, 200, 300, 300)
+
+效果
+
+![](https://s1.ax1x.com/2023/08/04/pPk9tDU.png)
+
+绘制一刷新一样的界面
+
+```javascript
+let index = 0
+function render() {
+  index += 0.01
+  // ctx.clearRect(0, 0, 500, 500)
+  if (index > 1) {
+    index = 0
+  }
+  const linearGradient = ctx.createLinearGradient(100, 200, 500, 500) // 必须大于绘制的图形，不然只会画到一半
+  linearGradient.addColorStop(0, 'red')
+  linearGradient.addColorStop(index, 'pink')
+  linearGradient.addColorStop(1, 'blue')
+  ctx.fillStyle = linearGradient
+  ctx.fillRect(100, 200, 300, 300)
+  requestAnimationFrame(render)
+}
+
+// 动画帧
+requestAnimationFrame(render)
+```
+
+- **径向渐变**
+
+> radialGradient = ctx.createRadialGradient(圆心 x,圆心 y,半径，圆心 x,圆心 y, 半径)
+
+使用镜像渐变绘制一个 3d 圆球
+
+```javascript
+const radiaGradient = ctx.createRadialGradient(210, 210, 10, 250, 250, 100)
+radiaGradient.addColorStop(0, 'pink')
+radiaGradient.addColorStop(1, 'red')
+ctx.fillStyle = radiaGradient
+
+ctx.arc(250, 250, 100, 0, Math.PI * 2)
+ctx.fill()
+```
+
+效果
+
+![](https://s1.ax1x.com/2023/08/04/pPk9YuT.png)
+
+- **圆锥渐变**
+
+> const conicGradient = ctx.createConicGradient(弧度，点坐标 x, 点坐标 y)
+
+使用圆锥渐变绘制一个圆锥
+
+```javascript
+const conicGradient = ctx.createConicGradient(Math.PI * 1.5, 300, 100)
+conicGradient.addColorStop(0, 'red')
+conicGradient.addColorStop(1, 'blue')
+
+// 先绘制一个锥形
+const path = new Path2D()
+path.moveTo(200, 300)
+path.lineTo(300, 100)
+path.lineTo(400, 300)
+path.quadraticCurveTo(300, 350, 200, 300)
+
+ctx.fillStyle = conicGradient
+ctx.fill(path)
+```
+
+效果：
+
+![](https://s1.ax1x.com/2023/08/04/pPk9GvV.png)
+
+### 3.7 图像填充
+
+创建图案对象
+
+> ctx.createPattern(img, 'repeat')
+
+- `img`: 图像对象
+
+- `repeat`: 指定如何重复图像(`repeat`默认铺满, `repeact-y`垂直方向, `repeact-x`水平方向, `no-repact`:不平铺)
+
+使用
+
+```javascript
+const img = new Image()
+img.src = './mkimages/image-20230801204834603.png'
+
+img.onload = () => {
+  const pattern = ctx.createPattern(img, 'repeat-y')
+  ctx.fillStyle = pattern
+  ctx.fillRect(0, 0, 500, 500)
+}
+```
+
+### 3.8 样式控制
+
+- 线形样式
+  - `lineWidth`:设置线条的宽度
+  - `lineCap`:设置线条末端样式
+  - `lineJoin`:设置线条与线条之间的接合处样式
+  - `miterLimit`：限制当两条线相交时交界处最大长度
+  - `getLineDash`:返回 一个包含 当前虚线样式，长度为非负偶数的数组
+  - `setLineDash`:设置虚线样式
+  - `lineDashOffset`:设置虚线样式的起始偏移量
