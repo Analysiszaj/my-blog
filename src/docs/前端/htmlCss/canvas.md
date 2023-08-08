@@ -460,6 +460,7 @@ img.onload = () => {
 ### 3.8 样式控制
 
 - 线形样式
+
   - `lineWidth`:设置线条的宽度
   - `lineCap`:设置线条末端样式
   - `lineJoin`:设置线条与线条之间的接合处样式
@@ -467,3 +468,59 @@ img.onload = () => {
   - `getLineDash`:返回 一个包含 当前虚线样式，长度为非负偶数的数组
   - `setLineDash`:设置虚线样式
   - `lineDashOffset`:设置虚线样式的起始偏移量
+
+- 阴影
+  - `shadowOffsetX = float`: x 轴的偏移量
+  - `shadowOffsetY = float`： y 轴的偏移量
+  - `shadowBlur = float` ： 模糊距离
+  - `shadowColor = color` ： 阴影颜色
+
+### 3.9 绘制图像或视频
+
+**绘制图像**
+
+> // 方式一
+>
+> ctx.drawImage(图像对象, 绘制的坐标 x, 绘制到的坐标 y, 图片的宽， 图片的高)
+>
+> // 方式二
+>
+> ctx.drawImage(图像对象，裁剪图片起始坐标 x, y, 裁剪图片的宽高 x, y, 绘制的位置 x, y， 渲染的宽高 x, y)
+
+```javascript
+const canvas = document.querySelector('#canvas1')
+const ctx = canvas.getContext('2d')
+
+const img = new Image()
+img.src = './image/foo.png'
+img.onload = function () {
+  ctx.drawImage(img, 0, 0， 250， 250)
+}
+```
+
+**绘制视频**
+
+```javascript
+const video = document.createElement('video')
+video.src = ''
+
+// 创建一个按钮将视频绘制到canvas 上
+let btn = document.querySelector('#btn')
+btn.addEventListener('click', function () {
+  if (video.pause) {
+    video.play()
+    render()
+  } else {
+    video.pause()
+  }
+})
+
+function render() {
+  // 视频起始位置， 绘制宽高
+  ctx.drawImage(video, 0, 0, 600, 400)
+
+  // 可以给视频添加水印(这样视频右下角位置就会有水印)
+  ctx.drawImage(img, 500, 350, 100, 50)
+  requestAnimationFrame(render)
+}
+```
