@@ -2313,6 +2313,125 @@ export function MyUse<T extend Use>(plugin: T) {
 }
 ```
 
-### 13.Scoped 和样式穿透
+## 13.Scoped 和样式穿透
 
-scoped 的原理就是给每个 css 样式添加唯一不重复的标记：data-v-hash, 在每句 css 选择器的末尾加一个当前组件的 data 属性选择器，组件内部如果包
+scoped 的原理就是给每个 css 样式添加唯一不重复的标记：data-v-hash, 在每句 css 选择器的末尾加一个当前组件的 data 属性选择器，组件内部如果包含其他组件，只会给其他组件的最外层添加上当前组件的标签
+
+使用方式:添加`:deep()`函数
+
+```vue
+<template>
+  <div class="at"></div>
+</template>
+<style>
+:deep(.at) {
+}
+</style>
+```
+
+### 13.1 插槽选择器`:slotted()`
+
+当我们使用插槽时,当前组件的`slot`会在父组件中被替换,如果我们想要当前组件中书写的样式能够作用到，插槽中的内容，这时候就需要使用插槽选择器.
+
+使用：
+
+child.vue
+
+```vue
+<template>
+  <div>
+    我是插槽
+    <slot></slot>
+  </div>
+</template>
+
+<style scoped>
+:slotted(.a) {
+  color: red;
+}
+</style>
+```
+
+index.vue
+
+```vue
+<template>
+  <div>
+    <child>
+      <div class="a">我是插入的内容</div>
+    </child>
+  </div>
+</template>
+```
+
+### 13.2 全局选择器`:global()`
+
+在 vue3 项目中的 template 模板中，在 style 标签上不加`scoped`就默认是全局样式,我们业可以通过`:global()`标签来设置全局样式
+
+使用：
+
+```css
+/*这时a选择器就是全局的*/
+:global(.a) {
+  color: red;
+}
+```
+
+### 13.3 动态 css
+
+该种方式可以让你能通过 js 的方式控制 css
+
+使用
+
+```vue
+<template>
+  <div class="div"></div>
+</template>
+
+<script>
+const style = ref({ color: 'red' })
+</script>
+
+<style>
+.div {
+  color: v-bind('style.color');
+}
+</style>
+```
+
+还可以使用`module`形式.
+
+```vue
+<template>
+  <div :class="[$style.div, $style.border]">动态css</div>
+</template>
+<script></script>
+
+<style module>
+.div {
+  color: red;
+}
+.border {
+  border: 1px solid #ccc;
+}
+</style>
+```
+
+我们也可以给 moudle 命名
+
+```html
+<style module="hahah"></style>
+```
+
+使用
+
+```html
+<div :class="[hahah.div, hahah.border]"></div>
+```
+
+vue3 也提供了一个 hook 来获取 css
+
+```javascript
+import { useCscModule } from 'vue'
+const css = userCssModule('hahah')
+```
