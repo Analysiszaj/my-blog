@@ -81,7 +81,7 @@ date: 2023-12-16
 </html>
 ```
 
-![](E:\博客\my-blog\src\docs\前端\htmlCss\mkimages\pi59mmd.png)
+![](https://s11.ax1x.com/2023/12/16/pi59mmd.png)
 
 我们可以通过`label-position`属性为`left`或者`right`来控制 label 的对齐方式为左对齐，还是右对齐，但是现在遇到一个场景，需要文字两端对齐
 
@@ -113,7 +113,7 @@ date: 2023-12-16
 
 **效果如下：**
 
-![](E:\博客\my-blog\src\docs\前端\htmlCss\mkimages\pi59n0A.png)
+![](https://s11.ax1x.com/2023/12/16/pi59n0A.png)
 
 ## 3.补充
 
