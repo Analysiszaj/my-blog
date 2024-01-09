@@ -7,7 +7,7 @@ export default defineUserConfig({
     '/': {
       lang: 'zh-CN',
       title: 'Zaylenの个人博客',
-      description: 'vuepress-theme-hope 的博客演示',
+      description: 'Zaylenの个人博客',
     },
   },
   theme,
